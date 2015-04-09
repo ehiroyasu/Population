@@ -1,4 +1,4 @@
-Package: PopulationTrend
+Package: DemographicTrend
 Title: This package examines the ability to detect a trend in a population using population vital rates and total abundance.
 Version: 1.0.0
 Authors@R: person("Elizabeth", "Hiroyasu", , "ehiroyasu@bren.ucsb.edu", role = c("aut", "cre"))
