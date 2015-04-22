@@ -1,5 +1,3 @@
-#'trend_func
-#'
 #'Adding a trend to survival rates in different stages
 #'
 #'This function adds a trend to stage 2 survival
@@ -14,7 +12,7 @@
 #'@author Elizabeth Hiroyasu
 
 
-trend<- function(surv_rand, beta, nstage, stage2mod){
+insert_survival_trend<- function(surv_rand, beta, nstage, stage2mod){
   
   surv_trend <- surv_rand
   
