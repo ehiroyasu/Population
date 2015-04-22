@@ -20,10 +20,8 @@ insert_survival_trend<- function(surv_mat, beta, nstage, stage2mod){
   surv_trend <- surv_mat
   
     for (i in years){
-      for (j in nstage){
-        surv_trend[j,stage2mod,i]<- surv_rand[j,stage2mod,i]-beta*i
-        if (surv_trend[j,stage2mod,i]<0){surv_trend[j,stage2mod,i]=0}
-      }
+      survival <- sum(surv_trend[,stage2mod,i])
+      surv_trend[,stage2mod,i] <- surv_trend[,stage2mod,i] * (suvival-beta*i)/survival
     }
   return(surv_trend)
 }
