@@ -1,9 +1,15 @@
-#'Load_Data
+#' Read in a subset of the Compadre database
 #'
-#'Loading compadre matrix data
-#'This function loads data from the compadre data set
+#'This function loads data from the compadre data set and subsets the data of interest
 #'
-#'@references Code is adapted from Owen Jones & Rob Salguero-Gomez https://github.com/jonesor/compadreDB/
+#'
+#' @param Compadre_file The name of the Compadre data file, in Rdata format. If the file is not in the working directory then this variable should also include the relative or absolute path.
+#'  
+#'  
+#'@return A list with metadata and mat slots following the same structure as the Compadre database but with only a subset of the data
+#'  
+#'
+#'@references Code is adapted from Owen Jones & Rob Salguero-Gomez \url{https://github.com/jonesor/compadreDB/}
 #'
 #'@references COMPADRE Plant Matrix Database. Max Planck Institute for
 #'Demographic Research (Germany). Available at www.compadre-db.org
@@ -12,8 +18,8 @@
 #'@author Elizabeth Hiroyasu
 #'
 
-Load_Data <- function(){
-  load("COMPADRE_10_11_2014_version_3.0.RData")
+Load_Compadre_Data <- function(Compadre_file){
+  load(Compadre_file)
   ##subset to all the metadata first
   metadata<- subset(compadre$metadata)
 
@@ -26,4 +32,3 @@ Load_Data <- function(){
 
   return(tempMetadata)
 }
-
