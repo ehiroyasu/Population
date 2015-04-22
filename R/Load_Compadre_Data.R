@@ -8,6 +8,8 @@
 #'  
 #'@return A list with metadata and mat slots following the same structure as the Compadre database but with only a subset of the data
 #'  
+#'  Notice that the first set of matrices (from Crone and Lesica 2004) appear to be 
+#'  unreliable, as the fecundity terms are all in the last column.
 #'
 #'@references Code is adapted from Owen Jones & Rob Salguero-Gomez \url{https://github.com/jonesor/compadreDB/}
 #'
