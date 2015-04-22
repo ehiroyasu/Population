@@ -3,18 +3,21 @@
 #'This function adds a trend to stage 2 survival
 #'in the survival matrices for a stage or age structured population.
 #'
-#'@param surv_rand A randomly sampled array of survival matrices
-#'@param beta dictates how large the trend is to be introduced to survival matrices
+#'@param surv_mat an array of survival matrices
+#'@param beta dictates how large the trend is to be introduced to survival matrices. A value of -beta will be added to survival each year
 #'@param nstage is the number of stages represented in the matrix data
+#'@param stage2mod the index of the stage for which survival is to be modified
+#'
+#'@return An array of matrices with a trend in survival
 #'@references COMPADRE Plant Matrix Database. Max Planck Institute for 
 #'Demographic Research (Germany). Available at www.compadre-db.org 
 #'(data downloaded on [1/1/2014]).
 #'@author Elizabeth Hiroyasu
 
 
-insert_survival_trend<- function(surv_rand, beta, nstage, stage2mod){
+insert_survival_trend<- function(surv_mat, beta, nstage, stage2mod){
   
-  surv_trend <- surv_rand
+  surv_trend <- surv_mat
   
     for (i in years){
       for (j in nstage){
