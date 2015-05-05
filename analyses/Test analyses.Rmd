@@ -1,0 +1,41 @@
+---
+title: "Test analyses"
+author: "Bruce Kendall"
+date: "May 5, 2015"
+output: html_document
+---
+
+Here we work out the methods for doing the demographic trend analyses.
+
+# Data loading and munging
+## Load in the Compadre data and take the default selection
+The data file needs to be in the working directory. It can be downloaded from http://www.compadre-db.org.
+```{r LoadData}
+library(DemographicTrend)
+CompadreFile <- "COMPADRE_10_11_2014_version_3.0.Rdata"
+mydata <- Load_Compadre_Data(CompadreFile)
+```
+
+## Find a dataset to work with
+The first population has a corrupted `matF`:
+```{r}
+mydata$mat[1]
+```
+Presumably this is something to do with the automatic decomopsition failing to deal with multiple rows of reproduction. Let's get rid of the this population.
+```{r}
+BadAuthors <- mydata$metadata$Authors[1]
+
+# Need to write a function to do this, but have to figure out how to parse the condition
+    metadata<- subset(mydata$metadata)
+
+  ##then refine by specified components
+  tempMetadata <- subset(metadata, Authors != BadAuthors)
+  tempMat <- mydata$mat[mydata$metadata$Authors != BadAuthors]
+
+  mydata <- list(metadata=tempMetadata, mat=tempMat)
+rm(tempMetadata); rm(tempMat)
+
+mydata$mat[1]
+```
+
+Select the annual matrices from this first species/population.
