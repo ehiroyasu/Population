@@ -39,13 +39,12 @@ nx_str<- cipi_nx$Nx
 years <- 1:length(cipi_nx$YR)
 N0_data<-nx_out(nx_str)
 
-######################################################################
 ##randomizing the cipi datasets
 surv_rand <- surv[,,sample(10)]
 cipi_f_rand<-fert[,,sample(10)]
 N0_rand <- N0_data[sample(10),]
 
-#####################################################################
+
 ##Adding a trend to survivals:
 #first, calculate the number of stages in our system:
 nstage<-1:dim(surv_rand)[1]
@@ -53,11 +52,11 @@ nstage<-1:dim(surv_rand)[1]
 ##to modify stage 2 survival, use trend function
 surv_trend <- trend(surv_rand, beta = 0.1, nstage, stage2mod=2)
 
-#####################################################################
+
 ##calculating new abundance matrices
 abundance<- abundance_func(N0_rand, surv_trend, cipi_f_rand)
 
-#####################################################################
+
 ##survival regression
 lm_surv<- surv_regr(surv_trend, years, stage2mod=2)
 
