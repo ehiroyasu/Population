@@ -1,0 +1,65 @@
+---
+title: "CiPi_Analysis"
+author: "Elizabeth Hiroyasu"
+date: "Wednesday, May 06, 2015"
+output: html_document
+---
+
+This is a sample analysis using the demographic trend package for a population of Cirsium pitcheri.
+
+# Data loading
+## Load in the Compadre data and take the default selection
+The data file needs to be in the working directory. It can be downloaded from http://www.compadre-db.org.
+
+
+```{r}
+library(DemographicTrend)
+CompadreFile <- "COMPADRE_10_11_2014_version_3.0.Rdata"
+mydata <- Load_Compadre_Data(CompadreFile)
+```
+
+#Subsetting out the cipi dataset
+CiPi <- subset(mydata, POP =="CIPI_1")
+
+##pulling out cipi survival matrices
+surv <- array(unlist(CiPi), dim = c(nrow(CiPi[[1]]$matU), ncol(CiPi[[1]]$matU), length(CiPi)))
+
+##pulling out cipi reproduction
+fert <- array(unlist(CiPi), dim = c(nrow(CiPi[[1]]$matF), ncol(CiPi[[1]]$matF), length(CiPi)))
+
+##pulling out cipi transition matrices
+trans <- array(unlist(CiPi), dim = c(nrow(CiPi[[1]]$matA), ncol(CiPi[[1]]$matA), length(CiPi)))
+
+
+##Loading the N0 vectors:
+##subsetting the data for cipi data
+N0_data <- load_N0()
+cipi_nx<- subset(N0_data, POP =="CIPI_1")
+nx_str<- cipi_nx$Nx
+years <- 1:length(cipi_nx$YR)
+N0_data<-nx_out(nx_str)
+
+######################################################################
+##randomizing the cipi datasets
+surv_rand <- surv[,,sample(10)]
+cipi_f_rand<-fert[,,sample(10)]
+N0_rand <- N0_data[sample(10),]
+
+#####################################################################
+##Adding a trend to survivals:
+#first, calculate the number of stages in our system:
+nstage<-1:dim(surv_rand)[1]
+
+##to modify stage 2 survival, use trend function
+surv_trend <- trend(surv_rand, beta = 0.1, nstage, stage2mod=2)
+
+#####################################################################
+##calculating new abundance matrices
+abundance<- abundance_func(N0_rand, surv_trend, cipi_f_rand)
+
+#####################################################################
+##survival regression
+lm_surv<- surv_regr(surv_trend, years, stage2mod=2)
+
+##abundance regression
+lm_abundance<- abundance_regr(abundance, years, stage2mod=2)
