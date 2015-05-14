@@ -29,7 +29,7 @@ CiPiMat<- as.array(compadre$mat[save])
 surv <- array(unlist(CiPiMat), dim = c(nrow(CiPiMat[[1]]$matU), ncol(CiPiMat[[1]]$matU), length(CiPiMat)))
 
 ##pulling out cipi reproduction
-fert <- array(unlist(CiPiMatMat), dim = c(nrow(CiPi[[1]]$matF), ncol(CiPiMat[[1]]$matF), length(CiPiMat)))
+fert <- array(unlist(CiPiMat), dim = c(nrow(CiPiMat[[1]]$matF), ncol(CiPiMat[[1]]$matF), length(CiPiMat)))
 
 ##pulling out cipi transition matrices
 trans <- array(unlist(CiPiMat), dim = c(nrow(CiPiMat[[1]]$matA), ncol(CiPiMat[[1]]$matA), length(CiPiMat)))
@@ -54,7 +54,7 @@ N0_rand <- N0_data[sample(10),]
 nstage<-1:dim(surv_rand)[1]
 
 ##to modify stage 2 survival, use trend function
-surv_trend <- trend(surv_rand, beta = 0.1, nstage, stage2mod=2)
+surv_trend <- insert_survival_trend(surv_rand, beta = 0.1, nstage, stage2mod=2)
 
 
 ##calculating new abundance matrices
