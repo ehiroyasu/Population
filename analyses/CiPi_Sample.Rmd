@@ -19,16 +19,20 @@ mydata <- Load_Compadre_Data(CompadreFile)
 ```
 
 #Subsetting out the cipi dataset
-CiPi <- subset(mydata, POP =="CIPI_1")
+CiPi <- subset(mydata$metadata, Population =="CiPi 1")
+
+#pulling out CiPi Matrices
+save<-as.numeric(rownames(CiPi))
+CiPiMat<- as.array(compadre$mat[save])
 
 ##pulling out cipi survival matrices
-surv <- array(unlist(CiPi), dim = c(nrow(CiPi[[1]]$matU), ncol(CiPi[[1]]$matU), length(CiPi)))
+surv <- array(unlist(CiPiMat), dim = c(nrow(CiPiMat[[1]]$matU), ncol(CiPiMat[[1]]$matU), length(CiPiMat)))
 
 ##pulling out cipi reproduction
-fert <- array(unlist(CiPi), dim = c(nrow(CiPi[[1]]$matF), ncol(CiPi[[1]]$matF), length(CiPi)))
+fert <- array(unlist(CiPiMatMat), dim = c(nrow(CiPi[[1]]$matF), ncol(CiPiMat[[1]]$matF), length(CiPiMat)))
 
 ##pulling out cipi transition matrices
-trans <- array(unlist(CiPi), dim = c(nrow(CiPi[[1]]$matA), ncol(CiPi[[1]]$matA), length(CiPi)))
+trans <- array(unlist(CiPiMat), dim = c(nrow(CiPiMat[[1]]$matA), ncol(CiPiMat[[1]]$matA), length(CiPiMat)))
 
 
 ##Loading the N0 vectors:
