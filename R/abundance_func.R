@@ -20,9 +20,11 @@
 
 abundance_func<- function(N0_rand, surv_trend, fert_mat){
   trans_mat<- surv_trend + fert_mat
+  abundance <- matrix(nrow=length(years)+1, ncol=nrow(surv_trend))
+  abundance[1,] <- N0_rand[1,]
   for (i in years){
-    abundance<-N0_rand
-    abundance[i,]<-trans_mat[,,i]%*%N0_rand[i,]
+    #abundance<-N0_rand
+    abundance[i+1,]<-trans_mat[,,i]%*%abundance[i,]
   }
-  return(abundance)
+  return(abundance[-1,])
 }
