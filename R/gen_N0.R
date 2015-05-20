@@ -13,18 +13,19 @@
 #'
 #'@author Elizabeth Hiroyasu
 
-gen_N0<- function(N0, trans_mat){
+gen_N0<- function(trans_mat){
   #creating new N0 vectors from transition matrices
   N0 <- rep(1, dim(trans_mat)[1])
   #taking the average of the transition matrices
   mean_TransMat<- apply(trans_mat, 1:2, mean)
   
   #calculating Nt
-  Nt <- matrix(0,11,5)
+  Nt <- matrix(data=0,nrow=(dim(trans_mat)[3]+1),ncol=(dim(trans_mat)[2]))
   Nt[1,]<-N0
-  for (i in 1:10){
+  for (i in 1:years){
     Nt[i+1,] <- mean_TransMat %*% Nt[i,]
-  } 
+  }
+  Nt<-Nt[-1,]
   return(Nt)
 }
 
