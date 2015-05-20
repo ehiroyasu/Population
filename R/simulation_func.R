@@ -15,11 +15,11 @@
 trend_sim<-function(surv_rand, fert_rand, N0_rand, nstage, surv_trend){
   #sampling 10 random survival and fertility matrices, and 10 random N0 vectors
   surv_rand <- surv_mat[,,sample(dim(surv_mat)[3])]
-<<<<<<< HEAD
-  fert_rand<-fert_mat[,,sample(dim(fert_mat)[3]))]
-=======
+#<<<<<<< HEAD
   fert_rand<-fert_mat[,,sample(dim(fert_mat)[3])]
->>>>>>> LoBr
+#=======
+  fert_rand<-fert_mat[,,sample(dim(fert_mat)[3])]
+#>>>>>>> LoBr
   N0_rand <- N0_data[sample(dim(N0_data)[1]),]
   
   ##Adding a trend to survivals:
