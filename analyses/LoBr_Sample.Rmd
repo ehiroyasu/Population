@@ -31,13 +31,22 @@ LoBrMat <- as.array(mydata$mat[mydata$metadata$SpeciesAuthor=="Lomatium_bradshaw
 ## Pull out the matrices
 ```{r}
 ##pulling out LoBr survival matrices
-surv_mat <- array(unlist(LoBrMat), dim = c(nrow(LoBrMat[[1]]$matU), ncol(LoBrMat[[1]]$matU), length(LoBrMat)))
+surv_mat<-array(1, dim=c(dim(LoBrMat[[1]]$matU)[1], dim(LoBrMat[[1]]$matU)[2], dim(LoBrMat)))
+for (i in 1:dim(LoBrMat)){
+  surv_mat[,,i]<-LoBrMat[[i]]$matU
+}
 
 ##pulling out LoBr reproduction
-fert_mat <- array(unlist(LoBrMat), dim = c(nrow(LoBrMat[[1]]$matF), ncol(LoBrMat[[1]]$matF), length(LoBrMat)))
+fert_mat<-array(1, dim=c(dim(LoBrMat[[1]]$matF)[1], dim(LoBrMat[[1]]$matF)[2], dim(LoBrMat)))
+for (i in 1:dim(LoBrMat)){
+  fert_mat[,,i]<-LoBrMat[[i]]$matF
+}
 
 ##pulling out LoBr transition matrices
-trans_mat <- array(unlist(LoBrMat), dim = c(nrow(LoBrMat[[1]]$matA), ncol(LoBrMat[[1]]$matA), length(LoBrMat)))
+trans_mat<-array(1, dim=c(dim(LoBrMat[[1]]$matA)[1], dim(LoBrMat[[1]]$matA)[2], dim(LoBrMat)))
+for (i in 1:dim(LoBrMat)){
+  trans_mat[,,i]<-LoBrMat[[i]]$matA
+}
 ```
 
 # Analysis
