@@ -1,29 +1,51 @@
-#'gen_N0
+#'Generate a matrix of N0 vectors to use in demographic trend simulations.
 #'
-#'Generating a matrix of N0 vectors to use in demographic trend simulations.
-#'This function creates a matrix that is the average of given transition matrices from the COMPADRE plant matrix database. 
-#'It then #'calculates the population over a ten year period using this average transition matrix and an N0 vector of 
-#'ones.
+#' Generate one or more abundance vectors from the stochastic stable
+#' distribution of a collection of matrices.
 #'
-#'@param N0 this is a vector of ones, and its dimensions are calculated from the dimensions of the transition matrix
-#'@param trans_mat an array of transition matrices from the COMPADRE plant matrix database.
+#'@param trans_mat an array of transition matrices 
+#'@param n_return number of abundance vectors to be returned
+#'@param n_converge number of time steps to simulate before recording abundance
+#'
+#'@return A matrix of population vectors. Even if \code{n_return = 1}, a
+#'  1xnstage matrix is returned, for compatibilty with legacy code elsewhere (I
+#'  hope this can be updated)
+#'
+#' @details Starts the population at the stable stage distribution of the mean matrix. Then the population is iterated for \code{n_converge} years, drawing a matrix at random each year. Finally, the iteration is continued for \code{n_return} years, again with a random draw each year.
+#' 
+#' The default value of \code{n_converge} is currently arbitrary, and may be too small to guarantee convergence to the stochastic stable distribution
+#' 
+#' If \code{n_return > 1}, the vqlues will \emph{not} be indepdendent, as they are subsequent values from a single stochastic simulation.
+#' 
 #'@references COMPADRE Plant Matrix Database. Max Planck Institute for 
 #'Demographic Research (Germany). Available at www.compadre-db.org 
 #'(data downloaded on [1/1/2014]).
 #'
-#'@author Elizabeth Hiroyasu
+#'@author Elizabeth Hiroyasu and Bruce Kendall
 
-gen_N0<- function(trans_mat){
-  #creating new N0 vectors from transition matrices
-  N0 <- rep(1, dim(trans_mat)[1])
-  #taking the average of the transition matrices
+gen_N0<- function(trans_mat, n_return=1, n_converge=20){
+  n_mat <- dim(trans_mat)[3] # Number of matrices
+  
+  # Start from the stable stage distribution of the mean matrix 
   mean_TransMat<- apply(trans_mat, 1:2, mean)
+  require(popbio)
+  N0 <- stable.stage(mean_TransMat)
+  
+  # Do the convergence iterations, without saving intermediate steps
+  Ntemp <- N0
+  index <- sample(n_mat, size=n_converge, replace=TRUE)
+  for (i in 1:n_converge) {
+    Ntemp <- trans_mat[,,index[i]] %*% Ntemp
+   # print(Ntemp)
+  }
+  
+  Nt <- matrix(data=0,nrow=(n_return+1),ncol=(dim(trans_mat)[2]))
   
   #calculating Nt
-  Nt <- matrix(data=0,nrow=(dim(trans_mat)[3]+1),ncol=(dim(trans_mat)[2]))
-  Nt[1,]<-N0
-  for (i in 1:years){
-    Nt[i+1,] <- mean_TransMat %*% Nt[i,]
+  Nt[1,]<-Ntemp
+  index <- sample(n_mat, size=n_return, replace=TRUE)
+  for (i in 1:n_return){
+    Nt[i+1,] <- trans_mat[,,index[i]] %*% Nt[i,]
   }
   Nt<-Nt[-1,]
   return(Nt)
