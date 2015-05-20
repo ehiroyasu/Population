@@ -1,0 +1,43 @@
+---
+title: "Lomatium bradshawii"
+author: "Elizabeth Hiroyasu"
+date: "Tuesday, May 19, 2015"
+output: html_document
+---
+
+This analysis explores the use of the demographic trend package for the species Lomatium bradshawii, Bradshaw's desert parsley. This is an endangered, herbaceous perennial that occurs in Oregon and Washington. Primary threats to L. bradshawii are habitat loss. To download the matrix population data for this species, visit the compadre website at 
+http://www.compadre-db.org.
+
+#Subsetting the data 
+
+LoBr<-subset(mydata$metadata, SpeciesAuthor=="Lomatium_bradshawii")
+
+#pulling out LoBr Matrices
+save<-as.numeric(rownames(LoBr))
+LoBrMat<- as.array(compadre$mat[save])
+
+
+
+```{r}
+##pulling out LoBr survival matrices
+surv_mat <- array(unlist(LoBrMat), dim = c(nrow(LoBrMat[[1]]$matU), ncol(LoBrMat[[1]]$matU), length(LoBrMat)))
+
+##pulling out LoBr reproduction
+fert_mat <- array(unlist(LoBrMat), dim = c(nrow(LoBrMat[[1]]$matF), ncol(LoBrMat[[1]]$matF), length(LoBrMat)))
+
+##pulling out LoBr transition matrices
+trans_mat <- array(unlist(LoBrMat), dim = c(nrow(LoBrMat[[1]]$matA), ncol(LoBrMat[[1]]$matA), length(LoBrMat)))
+```
+
+Unlike the Cirsium pitcheri example we worked on previously, we will not be using observed population vectors. Instead we will generate N0 vectors from the transition matrices using the DemographicTrend package:
+
+```{r, gen_N0}
+years<-1:dim(surv_mat)[3]
+N0_data<-gen_N0(trans_mat)
+```
+
+To introduce simulations to compare p-values using the functions in the Demographic Trend Package. For this exercise we have introduced the trend in stage four of the matrix survival data.
+```{r}
+return_pv<-replicate(5, trend_sim())
+```
+This code can be adjusted to increase the number of replications and returns a list of p-values for the survival and abundance regressions.
