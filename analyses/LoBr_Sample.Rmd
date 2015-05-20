@@ -8,16 +8,27 @@ output: html_document
 This analysis explores the use of the demographic trend package for the species Lomatium bradshawii, Bradshaw's desert parsley. This is an endangered, herbaceous perennial that occurs in Oregon and Washington. Primary threats to L. bradshawii are habitat loss. To download the matrix population data for this species, visit the compadre website at 
 http://www.compadre-db.org.
 
-#Subsetting the data 
+# Data loading
+## Load in the Compadre data and take the default selection
+The data file needs to be in the working directory. It can be downloaded from http://www.compadre-db.org.
 
+```{r}
+library(DemographicTrend)
+CompadreFile <- "COMPADRE_10_11_2014_version_3.0.Rdata"
+mydata <- Load_Compadre_Data(CompadreFile)
+```
+
+## Subset the data to the focal species
+```{r}
 LoBr<-subset(mydata$metadata, SpeciesAuthor=="Lomatium_bradshawii")
 
 #pulling out LoBr Matrices
 save<-as.numeric(rownames(LoBr))
-LoBrMat<- as.array(compadre$mat[save])
+LoBrMat<- as.array(mydata$mat[save])
+LoBrMat <- as.array(mydata$mat[mydata$metadata$SpeciesAuthor=="Lomatium_bradshawii"])
+```
 
-
-
+## Pull out the matrices
 ```{r}
 ##pulling out LoBr survival matrices
 surv_mat <- array(unlist(LoBrMat), dim = c(nrow(LoBrMat[[1]]$matU), ncol(LoBrMat[[1]]$matU), length(LoBrMat)))
@@ -29,6 +40,7 @@ fert_mat <- array(unlist(LoBrMat), dim = c(nrow(LoBrMat[[1]]$matF), ncol(LoBrMat
 trans_mat <- array(unlist(LoBrMat), dim = c(nrow(LoBrMat[[1]]$matA), ncol(LoBrMat[[1]]$matA), length(LoBrMat)))
 ```
 
+# Analysis
 Unlike the Cirsium pitcheri example we worked on previously, we will not be using observed population vectors. Instead we will generate N0 vectors from the transition matrices using the DemographicTrend package:
 
 ```{r, gen_N0}
