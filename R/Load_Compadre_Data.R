@@ -28,7 +28,7 @@ Load_Compadre_Data <- function(Compadre_file){
                          & GrowthType =="Herbaceous perennial" & StudyDuration >= 10 & MatrixDimension >= 3 &
                            MatrixCaptivity =="W" & MatrixSplit == "Divided")
   keep <- as.numeric(rownames(tempMetadata))
-  tempMetadata$tempMat <- compadre$mat[keep]
+#  tempMetadata$tempMat <- compadre$mat[keep]
 
   return(list(metadata=tempMetadata, mat=compadre$mat[keep]))
 }
