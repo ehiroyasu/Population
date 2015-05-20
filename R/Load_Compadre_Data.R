@@ -19,16 +19,16 @@
 #'
 
 Load_Compadre_Data <- function(Compadre_file){
-  load(Compadre_file)
+  #load(Compadre_file)
   ##subset to all the metadata first
-  metadata<- subset(compadre$metadata)
+  metadata<- subset(Compadre_file$metadata)
 
   ##then refine by specified components
   tempMetadata <- subset(metadata, MatrixComposite == "Individual" & MatrixTreatment == "Unmanipulated"
                          & GrowthType =="Herbaceous perennial" & StudyDuration >= 10 & MatrixDimension >= 3 &
                            MatrixCaptivity =="W" & MatrixSplit == "Divided")
   keep <- as.numeric(rownames(tempMetadata))
-#  tempMetadata$tempMat <- compadre$mat[keep]
+  tempMetadata$tempMat <- Compadre_file$mat[keep]
 
-  return(list(metadata=tempMetadata, mat=compadre$mat[keep]))
+  return(list(metadata=tempMetadata, mat=Compadre_file$mat[keep]))
 }
