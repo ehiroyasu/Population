@@ -33,7 +33,7 @@ gen_N0<- function(trans_mat, n_return=1, n_converge=20){
   
   # Do the convergence iterations, without saving intermediate steps
   Ntemp <- N0
-  index <- sample(n_mat, size=n_converge, replace=TRUE)
+  index <- sample(n_mat, size=n_converge, replace=TRUE) 
   for (i in 1:n_converge) {
     Ntemp <- trans_mat[,,index[i]] %*% Ntemp
    # print(Ntemp)
