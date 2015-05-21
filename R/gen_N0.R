@@ -47,7 +47,7 @@ gen_N0<- function(trans_mat, n_return=1, n_converge=20){
   for (i in 1:n_return){
     Nt[i+1,] <- trans_mat[,,index[i]] %*% Nt[i,]
   }
-  Nt<-Nt[-1,]
+  Nt<-Nt[-1,, drop=FALSE]
   return(Nt)
 }
 
