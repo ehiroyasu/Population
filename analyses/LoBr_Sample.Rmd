@@ -14,8 +14,8 @@ The data file needs to be in the working directory. It can be downloaded from ht
 
 ```{r}
 library(DemographicTrend)
-CompadreFile <- "COMPADRE_10_11_2014_version_3.0.Rdata"
-mydata <- Load_Compadre_Data(CompadreFile)
+Compadre_file <- "COMPADRE_10_11_2014_version_3.0.Rdata"
+mydata <- Load_Compadre_Data(Compadre_file)
 ```
 
 ## Subset the data to the focal species
@@ -59,6 +59,6 @@ N0_data<-gen_N0(trans_mat)
 
 To introduce simulations to compare p-values using the functions in the Demographic Trend Package. For this exercise we have introduced the trend in stage four of the matrix survival data.
 ```{r}
-return_pv<-replicate(5, trend_sim())
+return_pv<-replicate(100, trend_sim())
 ```
 This code can be adjusted to increase the number of replications and returns a list of p-values for the survival and abundance regressions.
