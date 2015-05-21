@@ -20,14 +20,14 @@ trend_sim<-function(surv_rand, fert_rand, N0_rand, nstage, surv_trend){
 #=======
   fert_rand<-fert_mat[,,sample(dim(fert_mat)[3])]
 #>>>>>>> LoBr
-  N0_rand <- N0_data[sample(dim(N0_data)[1]),]
+  N0_rand <- N0_data[sample(dim(N0_data)[1]),, drop=FALSE]
   
   ##Adding a trend to survivals:
   #first, calculate the number of stages in our system:
   nstage<-1:dim(surv_rand)[1]
   
   ##to modify stage 2 survival, use trend function
-  surv_trend <- insert_survival_trend(surv_rand, beta = 0.1, nstage, stage2mod=4)
+  surv_trend <- insert_survival_trend(surv_rand, 0.1, nstage, 4)
   
   ##calculating new abundance matrices
   abundance<- abundance_func(N0_rand, surv_trend, fert_rand)
