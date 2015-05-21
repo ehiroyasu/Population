@@ -38,7 +38,7 @@ trend_sim<-function(surv_rand, fert_rand, N0_rand, nstage, surv_trend){
   
   ##abundance regression
   lm_abundance<- abundance_regr(abundance, years, stage2mod=4)
-  pv_abundance<- (lm_abundance$coefficients[2,4])
+  pv_abundance<- (lm_abundance$coefficients[3,4])
   
   return(list("survival p-value"=pv_surv, "abundance p-value"=pv_abundance))
 }
