@@ -18,21 +18,38 @@ CompadreFile <- "COMPADRE_10_11_2014_version_3.0.Rdata"
 mydata <- Load_Compadre_Data(CompadreFile)
 ```
 
-#Subsetting out the cipi dataset
-CiPi <- subset(mydata$metadata, Population =="CiPi 1")
 
-#pulling out CiPi Matrices
+## Subset the data to the focal species
+```{r}
+CiPi<-subset(mydata$metadata, Population=="CiPi 1")
+
+#pulling out LoBr Matrices
 save<-as.numeric(rownames(CiPi))
-CiPiMat<- as.array(compadre$mat[save])
+CiPiMat<- as.array(mydata$mat[save])
+CiPiMat <- as.array(mydata$mat[mydata$metadata$Population=="CiPi 1"])
+```
 
-##pulling out cipi survival matrices
-surv_mat <- array(unlist(CiPiMat), dim = c(nrow(CiPiMat[[1]]$matU), ncol(CiPiMat[[1]]$matU), length(CiPiMat)))
 
-##pulling out cipi reproduction
-fert_mat <- array(unlist(CiPiMat), dim = c(nrow(CiPiMat[[1]]$matF), ncol(CiPiMat[[1]]$matF), length(CiPiMat)))
+## Pull out the matrices
+```{r}
+##pulling out LoBr survival matrices
+surv_mat<-array(1, dim=c(dim(CiPiMat[[1]]$matU)[1], dim(CiPiMat[[1]]$matU)[2], dim(CiPiMat)))
+for (i in 1:dim(CiPiMat)){
+  surv_mat[,,i]<-CiPiMat[[i]]$matU
+}
 
-##pulling out cipi transition matrices
-trans <- array(unlist(CiPiMat), dim = c(nrow(CiPiMat[[1]]$matA), ncol(CiPiMat[[1]]$matA), length(CiPiMat)))
+##pulling out LoBr reproduction
+fert_mat<-array(1, dim=c(dim(CiPiMat[[1]]$matF)[1], dim(CiPiMat[[1]]$matF)[2], dim(CiPiMat)))
+for (i in 1:dim(CiPiMat)){
+  fert_mat[,,i]<-CiPiMat[[i]]$matF
+}
+
+##pulling out LoBr transition matrices
+trans_mat<-array(1, dim=c(dim(CiPiMat[[1]]$matA)[1], dim(CiPiMat[[1]]$matA)[2], dim(CiPiMat)))
+for (i in 1:dim(CiPiMat)){
+  trans_mat[,,i]<-CiPiMat[[i]]$matA
+}
+```
 
 
 ##Loading the N0 vectors:
