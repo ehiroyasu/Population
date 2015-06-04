@@ -1,10 +1,11 @@
 #'Load_N0
 #'Loading N0 vectors from Ellis et al.
 #'
-#'@param g growth rate for adjusted stage
+#'@param years is the number of years of N0
+#'@param nstage is the number of stages in the matrix structured population
 #'
 #'@references Martha M. Ellis, Jennifer L. Williams, Peter Lesica, Timothy J. Bell, Paulette Bierzychudek, Marlin Bowles, 
-#'  Elizabeth E. Crone, Daniel F. Doak, Johan Ehrlén, Albertine Ellis-Adam, Kathryn McEachern, Rengaian Ganesan, 
+#'  Elizabeth E. Crone, Daniel F. Doak, Johan Ehrl?n, Albertine Ellis-Adam, Kathryn McEachern, Rengaian Ganesan, 
 #'  Penelope Latham, Sheila Luijten, Thomas N. Kaye, Tiffany M. Knight, Eric S. Menges, William F. Morris, 
 #'  Hans den Nijs, Gerard Oostermeijer, Pedro F. Quintana-Ascencio, J. Stephen Shelly, Amanda Stanley, Andrea Thorpe, 
 #'  Tamara Ticktin, Teresa Valverde, and Carl Weekley. 2012. Matrix population models from 20 studies of perennial 
@@ -14,7 +15,7 @@
 #'
 #'@author Elizabeth Hiroyasu
 
-load_N0 <-  function(){
+load_N0 <-  function(years, nstage){
   url <-"http://esapubs.org/Archive/ecol/E093/083/Transition_Matrices.txt"
   if ( !file.exists("Transition_Matrices.txt") )
     download.file(url, "Transition_Matrices.txt")
@@ -39,7 +40,7 @@ load_N0 <-  function(){
   ##abundance data by year
   
   nx_out <- function (nx_str){
-    nx <- matrix(NA, nrow = length(years), ncol=3)
+    nx <- matrix(NA, nrow = length(years), ncol=length(nstage))
     for (i in years) {
       nx[i,] <- matrix(convert_nx(nx_str[i]))
     }
