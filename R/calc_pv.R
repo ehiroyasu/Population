@@ -1,6 +1,6 @@
-#'simulation function
+#'calc_pv
 #'
-#'brings together processes for analyzing an inserted survival trend in order to run simulations
+#'Calculates the p-values of survival and abundance regressions over time after a trend is inserted into survival.
 #'
 #'@param surv_mat array of survival matrices from COMPADRE database
 #'@param fert_mat array of fertility matrices from COMPADRE database
@@ -13,7 +13,7 @@
 #'
 
 
-trend_sim<-function(surv_mat, fert_mat, N0_data, nstage, years, stage2mod){
+calc_pv<-function(surv_mat, fert_mat, N0_data, nstage, years, stage2mod){
   #sampling 10 random survival and fertility matrices, and 10 random N0 vectors
   surv_rand <- surv_mat[,,sample(dim(surv_mat)[3])]
 #<<<<<<< HEAD
