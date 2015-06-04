@@ -18,7 +18,7 @@
 #'@author Elizabeth Hiroyasu
 
 
-abundance_func<- function(N0_rand, surv_trend, fert_rand){
+calc_abundance<- function(N0_rand, surv_trend, fert_rand){
   trans_mat<- surv_trend + fert_rand
   abundance <- matrix(nrow=length(years)+1, ncol=(dim(surv_trend)[1]))
   abundance[1,] <- N0_rand[1,]
