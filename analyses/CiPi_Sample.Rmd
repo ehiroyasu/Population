@@ -23,32 +23,24 @@ mydata <- Load_Compadre_Data(CompadreFile)
 ```{r}
 CiPi<-subset(mydata$metadata, Population=="CiPi 1")
 
-#pulling out LoBr Matrices
+#pulling out CiPi Matrices
 save<-as.numeric(rownames(CiPi))
-CiPiMat<- as.array(mydata$mat[save])
-CiPiMat <- as.array(mydata$mat[mydata$metadata$Population=="CiPi 1"])
+MatrixData<- as.array(mydata$mat[save])
+MatrixData<- as.array(mydata$mat[mydata$metadata$Population=="CiPi 1"])
 ```
 
 
 ## Pull out the matrices
 ```{r}
-##pulling out LoBr survival matrices
-surv_mat<-array(1, dim=c(dim(CiPiMat[[1]]$matU)[1], dim(CiPiMat[[1]]$matU)[2], dim(CiPiMat)))
-for (i in 1:dim(CiPiMat)){
-  surv_mat[,,i]<-CiPiMat[[i]]$matU
-}
+##pulling out CiPi survival matrices
+surv_mat<-(extract_mat(MatrixData))$"survival matrices"
 
-##pulling out LoBr reproduction
-fert_mat<-array(1, dim=c(dim(CiPiMat[[1]]$matF)[1], dim(CiPiMat[[1]]$matF)[2], dim(CiPiMat)))
-for (i in 1:dim(CiPiMat)){
-  fert_mat[,,i]<-CiPiMat[[i]]$matF
-}
 
-##pulling out LoBr transition matrices
-trans_mat<-array(1, dim=c(dim(CiPiMat[[1]]$matA)[1], dim(CiPiMat[[1]]$matA)[2], dim(CiPiMat)))
-for (i in 1:dim(CiPiMat)){
-  trans_mat[,,i]<-CiPiMat[[i]]$matA
-}
+##pulling out CiPi reproduction
+fert_mat<-(extract_mat(MatrixData))$"fertility matrices"
+
+##pulling out CiPi transition matrices
+trans_mat<-(extract_mat(MatrixData))$"transition matrices"
 ```
 
 
@@ -62,6 +54,6 @@ N0_data<-nx_out(nx_str)
 
 To introduce simulations to compare p-values using the functions in the Demographic Trend Package:
 ```{r}
-return_pv<-replicate(10, trend_sim())
+return_pv<-replicate(10, calc_pv(surv_mat, fert_mat, N0_data, nstage, years, stage2mod=2, beta=0.01))
 ```
 This code can be adjusted to increase the number of replications and returns a list of p-values for the survival and abundance regressions.
