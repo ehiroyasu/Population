@@ -24,29 +24,21 @@ LoBr<-subset(mydata$metadata, SpeciesAuthor=="Lomatium_bradshawii")
 
 #pulling out LoBr Matrices
 save<-as.numeric(rownames(LoBr))
-LoBrMat<- as.array(mydata$mat[save])
-LoBrMat <- as.array(mydata$mat[mydata$metadata$SpeciesAuthor=="Lomatium_bradshawii"])
+MatrixData<- as.array(mydata$mat[save])
+MatrixData<- as.array(mydata$mat[mydata$metadata$SpeciesAuthor=="Lomatium_bradshawii"])
 ```
 
 ## Pull out the matrices
 ```{r}
 ##pulling out LoBr survival matrices
-surv_mat<-array(1, dim=c(dim(LoBrMat[[1]]$matU)[1], dim(LoBrMat[[1]]$matU)[2], dim(LoBrMat)))
-for (i in 1:dim(LoBrMat)){
-  surv_mat[,,i]<-LoBrMat[[i]]$matU
-}
+surv_mat<-(extract_mat(MatrixData))$"survival matrices"
 
-##pulling out LoBr reproduction
-fert_mat<-array(1, dim=c(dim(LoBrMat[[1]]$matF)[1], dim(LoBrMat[[1]]$matF)[2], dim(LoBrMat)))
-for (i in 1:dim(LoBrMat)){
-  fert_mat[,,i]<-LoBrMat[[i]]$matF
-}
+
+##pulling out LoBr fertility matrices
+fert_mat<-(extract_mat(MatrixData))$"fertility matrices"
 
 ##pulling out LoBr transition matrices
-trans_mat<-array(1, dim=c(dim(LoBrMat[[1]]$matA)[1], dim(LoBrMat[[1]]$matA)[2], dim(LoBrMat)))
-for (i in 1:dim(LoBrMat)){
-  trans_mat[,,i]<-LoBrMat[[i]]$matA
-}
+trans_mat<-(extract_mat(MatrixData))$"transition matrices"
 ```
 
 # Analysis
@@ -59,6 +51,6 @@ N0_data<-gen_N0(trans_mat)
 
 To introduce simulations to compare p-values using the functions in the Demographic Trend Package. For this exercise we have introduced the trend in stage four of the matrix survival data.
 ```{r}
-return_pv<-replicate(100, trend_sim())
+return_pv<-replicate(10, calc_pv(surv_mat, fert_mat, N0_data, nstage, years, stage2mod=2, beta=0.01))
 ```
 This code can be adjusted to increase the number of replications and returns a list of p-values for the survival and abundance regressions.
