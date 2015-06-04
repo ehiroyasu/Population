@@ -2,17 +2,18 @@
 #'
 #'brings together processes for analyzing an inserted survival trend in order to run simulations
 #'
-#'@param surv_rand array of randomized survival matrices from COMPADRE database
-#'@param fert_rand array of randomized fertility matrices from COMPADRE database
-#'@param N0_rand matrix of randomized N0 vectors
+#'@param surv_mat array of survival matrices from COMPADRE database
+#'@param fert_mat array of fertility matrices from COMPADRE database
+#'@param N0_data matrix of N0 vectors
 #'@param nstage number of stages in matrix data
-#'@param surv_trend array of survival matrices with inserted trend beta
+#'@param years number of years in simulation
+#'@param stage2mod stage that is modified by inserted survival trend
 #'
 #'@author Elizabeth Hiroyasu
 #'
 
 
-trend_sim<-function(surv_rand, fert_rand, N0_rand, nstage, surv_trend){
+trend_sim<-function(surv_mat, fert_mat, N0_data, nstage, years, stage2mod){
   #sampling 10 random survival and fertility matrices, and 10 random N0 vectors
   surv_rand <- surv_mat[,,sample(dim(surv_mat)[3])]
 #<<<<<<< HEAD
@@ -30,7 +31,7 @@ trend_sim<-function(surv_rand, fert_rand, N0_rand, nstage, surv_trend){
   surv_trend <- insert_survival_trend(surv_rand, 0.1, nstage, 4)
   
   ##calculating new abundance matrices
-  abundance<- abundance_func(N0_rand, surv_trend, fert_rand)
+  abundance<- calc_abundance(N0_rand, surv_trend, fert_rand)
   
   ##survival regression
   lm_surv<- surv_regr(surv_trend, years, stage2mod=4)
