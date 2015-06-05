@@ -1,8 +1,5 @@
-#'Load_N0
+#'load_N0
 #'Loading N0 vectors from Ellis et al.
-#'
-#'@param years is the number of years of N0
-#'@param nstage is the number of stages in the matrix structured population
 #'
 #'@references Martha M. Ellis, Jennifer L. Williams, Peter Lesica, Timothy J. Bell, Paulette Bierzychudek, Marlin Bowles, 
 #'  Elizabeth E. Crone, Daniel F. Doak, Johan Ehrl?n, Albertine Ellis-Adam, Kathryn McEachern, Rengaian Ganesan, 
@@ -15,7 +12,7 @@
 #'
 #'@author Elizabeth Hiroyasu
 
-load_N0 <-  function(years, nstage){
+load_N0 <-  function(){
   url <-"http://esapubs.org/Archive/ecol/E093/083/Transition_Matrices.txt"
   if ( !file.exists("Transition_Matrices.txt") )
     download.file(url, "Transition_Matrices.txt")
@@ -25,25 +22,4 @@ load_N0 <-  function(years, nstage){
   return(N0_data)
 }
 
-  ##subsetting and converting to usable R code
-  ##calculating abundances
-  convert_nx <- function(nx_str){
-    nx_str<-substr(nx_str, 2, nchar(nx_str)-1)
-    nx_str<-gsub(' ', ',', nx_str)
-    nx_str<-paste('c(',nx_str,')',sep='')
-    nx <- eval(parse(text=nx_str))
-    nx<-matrix(nx, nrow=length(nx), byrow=T)
-    nx<-as.vector(nx)
-    return(nx) 
-  }
-  
-  ##abundance data by year
-  
-  nx_out <- function (nx_str){
-    nx <- matrix(NA, nrow = length(years), ncol=length(nstage))
-    for (i in years) {
-      nx[i,] <- matrix(convert_nx(nx_str[i]))
-    }
-    return(nx)
-  }
 
