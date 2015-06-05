@@ -36,7 +36,7 @@ MatrixData<- as.array(mydata$mat[mydata$metadata$Population=="CiPi 1"])
 surv_mat<-(extract_mat(MatrixData))$"survival matrices"
 
 
-##pulling out CiPi reproduction
+##pulling out CiPi fertility matrices
 fert_mat<-(extract_mat(MatrixData))$"fertility matrices"
 
 ##pulling out CiPi transition matrices
@@ -45,15 +45,16 @@ trans_mat<-(extract_mat(MatrixData))$"transition matrices"
 
 
 ##Loading the N0 vectors:
-##subsetting the data for cipi data
 N0_data <- load_N0()
+
+##subsetting the data for cipi data
 cipi_nx<- subset(N0_data, POP =="CIPI_1")
 nx_str<- cipi_nx$Nx
-years <- 1:length(cipi_nx$YR)
+nx_str<-convert_nx(nx_str)
 N0_data<-nx_out(nx_str)
 
 To introduce simulations to compare p-values using the functions in the Demographic Trend Package:
 ```{r}
-return_pv<-replicate(10, calc_pv(surv_mat, fert_mat, N0_data, nstage, years, stage2mod=2, beta=0.01))
+return_pv<-replicate(10, calc_pv(surv_mat, fert_mat, N0_data, nstage, years=1:20, stage2mod=2, beta=0.01, years))
 ```
 This code can be adjusted to increase the number of replications and returns a list of p-values for the survival and abundance regressions.
