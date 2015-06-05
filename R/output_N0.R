@@ -1,5 +1,7 @@
-#'convert_N0
-#'Converting N0 data from transition matrices to usable R code.
+#'output_N0
+#'
+#'Outputs N0 data from transition matrices in Ellis et al. Requires the 'convert_nx' function to convert the 
+#'data to to usable R code. 
 #'
 #'@param nx_str is the subsetted N0 strings from the Ellis et al. data.
 #'
@@ -15,24 +17,7 @@
 #'@author Elizabeth Hiroyasu
 
 
-convert_nx <- function(nx_str){
-  nx_str<-substr(nx_str, 2, nchar(nx_str)-1)
-  nx_str<-gsub(' ', ',', nx_str)
-  nx_str<-paste('c(',nx_str,')',sep='')
-  nx <- eval(parse(text=nx_str))
-  nx<-matrix(nx, nrow=length(nx), byrow=T)
-  nx<-as.vector(nx)
-}
-
-
-
-
-
-
-
-##abundance data by year
-
-nx_out <- function (nx_str){
+output_N0 <- function (nx_str){
   nx <- matrix(NA, nrow = length(years), ncol=length(nstage))
   for (i in years) {
     nx[i,] <- matrix(convert_nx(nx_str[i]))
