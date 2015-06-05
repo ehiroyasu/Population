@@ -7,6 +7,7 @@
 #'@param beta dictates how large the trend is to be introduced to survival matrices. A value of -beta will be added to survival each year
 #'@param nstage is the number of stages represented in the matrix data
 #'@param stage2mod the index of the stage for which survival is to be modified
+#'@param years number of years in the simulation
 #'
 #'@return An array of matrices with a trend in survival
 #'@references COMPADRE Plant Matrix Database. Max Planck Institute for 
@@ -15,7 +16,7 @@
 #'@author Elizabeth Hiroyasu
 
 
-insert_survival_trend<- function(surv_mat, beta, nstage, stage2mod){
+insert_survival_trend<- function(surv_mat, beta, nstage, stage2mod, years){
   
   surv_trend <- surv_mat
   for (i in years){
