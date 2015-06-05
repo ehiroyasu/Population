@@ -15,21 +15,20 @@
 
 
 calc_pv<-function(surv_mat, fert_mat, N0_data, nstage, years, stage2mod, beta){
-  #sampling 10 random survival and fertility matrices, and 10 random N0 vectors
-  surv_rand <- surv_mat[,,sample(dim(surv_mat)[3])]
-#<<<<<<< HEAD
-  fert_rand<-fert_mat[,,sample(dim(fert_mat)[3])]
-#=======
-  fert_rand<-fert_mat[,,sample(dim(fert_mat)[3])]
-#>>>>>>> LoBr
-  N0_rand <- N0_data[sample(dim(N0_data)[1]),, drop=FALSE]
+  #sampling 10 random survival and fertility matrices, and random N0 vectors
+  
+  surv_rand <- array(surv_mat, dim=c(length(nstage), length(nstage), length(years)))
+  surv_rand <- surv_rand[,,sample(dim(surv_rand)[3], replace=T)]
+
+  fert_rand <- array(fert_mat, dim=c(length(nstage), length(nstage), length(years)))
+  fert_rand <- fert_rand[,,sample(dim(surv_rand)[3], replace=T)]
   
   ##Adding a trend to survivals:
   #first, calculate the number of stages in our system:
   nstage<-1:dim(surv_rand)[1]
   
   ##to modify stage 2 survival, use trend function
-  surv_trend <- insert_survival_trend(surv_rand, beta, nstage, stage2mod)
+  surv_trend <- insert_survival_trend(surv_rand, beta, nstage, stage2mod, years)
   
   ##calculating new abundance matrices
   abundance<- calc_abundance(N0_rand, surv_trend, fert_rand)
