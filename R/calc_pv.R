@@ -15,21 +15,24 @@
 
 
 calc_pv<-function(surv_mat, fert_mat, N0_data, nstage, years, stage2mod, beta){
-  #sampling 10 random survival and fertility matrices, and random N0 vectors
-  
+  #sampling 10 random survival matrices  
   surv_rand <- array(surv_mat, dim=c(length(nstage), length(nstage), length(years)))
   surv_rand <- surv_rand[,,sample(dim(surv_rand)[3], replace=T)]
 
+  #calculating the variance in survival:
+  surv_var<- calc_surv_var(surv_rand, stage2mod, years)
+  
+  #sampling 10 random fertility matrices
   fert_rand <- array(fert_mat, dim=c(length(nstage), length(nstage), length(years)))
   fert_rand <- fert_rand[,,sample(dim(fert_rand)[3], replace=T)]
   
   ##to modify stage 2 survival, use trend function
-  surv_trend <- insert_survival_trend(surv_rand, beta, nstage, stage2mod, years)
+  surv_trend <- insert_survival_trend(surv_rand, beta, nstage, stage2mod, years)[[1]]
   ##to print the number of times the survival goes to zero in the stages where a trend has been inserted
-  surv_zero <- surv_trend[2]
+  surv_zero <- surv_trend[[2]]
   
   ##calculating new abundance matrices
-  abundance<- calc_abundance(N0_data, surv_trend[1], fert_rand)
+  abundance<- calc_abundance(N0_data, surv_trend, fert_rand)
   
   ##survival regression
   lm_surv<- surv_regr(surv_trend, years, stage2mod)
@@ -39,5 +42,5 @@ calc_pv<-function(surv_mat, fert_mat, N0_data, nstage, years, stage2mod, beta){
   lm_abundance<- abundance_regr(abundance, years, stage2mod)
   pv_abundance<- (lm_abundance$coefficients[3,4])
   
-  return(list("survival p-value"=pv_surv, "abundance p-value"=pv_abundance, surv_zero))
+  return(list("survival p-value"=pv_surv, "abundance p-value"=pv_abundance, "n surv=0"=surv_zero, "survival variance"=surv_var))
 }
