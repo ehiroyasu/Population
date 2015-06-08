@@ -25,9 +25,11 @@ calc_pv<-function(surv_mat, fert_mat, N0_data, nstage, years, stage2mod, beta){
   
   ##to modify stage 2 survival, use trend function
   surv_trend <- insert_survival_trend(surv_rand, beta, nstage, stage2mod, years)
+  ##to print the number of times the survival goes to zero in the stages where a trend has been inserted
+  surv_zero <- surv_trend[2]
   
   ##calculating new abundance matrices
-  abundance<- calc_abundance(N0_data, surv_trend, fert_rand)
+  abundance<- calc_abundance(N0_data, surv_trend[1], fert_rand)
   
   ##survival regression
   lm_surv<- surv_regr(surv_trend, years, stage2mod)
@@ -37,5 +39,5 @@ calc_pv<-function(surv_mat, fert_mat, N0_data, nstage, years, stage2mod, beta){
   lm_abundance<- abundance_regr(abundance, years, stage2mod)
   pv_abundance<- (lm_abundance$coefficients[3,4])
   
-  return(list("survival p-value"=pv_surv, "abundance p-value"=pv_abundance))
+  return(list("survival p-value"=pv_surv, "abundance p-value"=pv_abundance, surv_zero))
 }
