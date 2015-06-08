@@ -4,6 +4,8 @@
 #'data to to usable R code. 
 #'
 #'@param nx_str is the subsetted N0 strings from the Ellis et al. data.
+#'@param years is the number of years in the simulation
+#'@param nstage is the number of stages in the matrix population structure
 #'
 #'@references Martha M. Ellis, Jennifer L. Williams, Peter Lesica, Timothy J. Bell, Paulette Bierzychudek, Marlin Bowles, 
 #'  Elizabeth E. Crone, Daniel F. Doak, Johan Ehrl?n, Albertine Ellis-Adam, Kathryn McEachern, Rengaian Ganesan, 
@@ -17,7 +19,7 @@
 #'@author Elizabeth Hiroyasu
 
 
-output_N0 <- function (nx_str){
+output_N0 <- function (nx_str, years, nstage){
   nx <- matrix(NA, nrow = length(years), ncol=length(nstage))
   for (i in years) {
     nx[i,] <- matrix(convert_nx(nx_str[i]))
