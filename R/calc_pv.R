@@ -21,11 +21,7 @@ calc_pv<-function(surv_mat, fert_mat, N0_data, nstage, years, stage2mod, beta){
   surv_rand <- surv_rand[,,sample(dim(surv_rand)[3], replace=T)]
 
   fert_rand <- array(fert_mat, dim=c(length(nstage), length(nstage), length(years)))
-  fert_rand <- fert_rand[,,sample(dim(surv_rand)[3], replace=T)]
-  
-  ##Adding a trend to survivals:
-  #first, calculate the number of stages in our system:
-  nstage<-1:dim(surv_rand)[1]
+  fert_rand <- fert_rand[,,sample(dim(fert_rand)[3], replace=T)]
   
   ##to modify stage 2 survival, use trend function
   surv_trend <- insert_survival_trend(surv_rand, beta, nstage, stage2mod, years)
