@@ -15,17 +15,14 @@
 
 
 calc_pv<-function(surv_mat, fert_mat, N0_data, nstage, years, stage2mod, beta){
-  #sampling 10 random survival matrices  
-  surv_rand <- array(surv_mat, dim=c(length(nstage), length(nstage), length(years)))
-  surv_rand <- surv_rand[,,sample(dim(surv_rand)[3], replace=T)]
-
+  #sampling random survival matrices and fertility matrices with n years in simulation
+  i_rand <- sample(1:dim(surv_mat)[3], size=length(years), replace=T)
+  surv_rand <- surv_mat[,,i_rand]
+  fert_rand <- fert_rand[,,i_rand]
+  
   #calculating the variance in survival:
-  surv_var<- calc_surv_var(surv_rand, stage2mod, years)
-  
-  #sampling 10 random fertility matrices
-  fert_rand <- array(fert_mat, dim=c(length(nstage), length(nstage), length(years)))
-  fert_rand <- fert_rand[,,sample(dim(fert_rand)[3], replace=T)]
-  
+  #surv_var<- calc_surv_var(surv_rand, stage2mod, years)
+   
   ##to modify stage 2 survival, use trend function
   surv_trend <- insert_survival_trend(surv_rand, beta, nstage, stage2mod, years)[[1]]
   ##to print the number of times the survival goes to zero in the stages where a trend has been inserted
