@@ -9,7 +9,8 @@
 #'@param stage2mod the index of the stage for which survival is to be modified
 #'@param years number of years in the simulation
 #'
-#'@return An array of matrices with a trend in survival
+#'@return surv_trend An array of matrices with a trend in survival 
+#'@return surv_zero a count of the number of times survival goes to zero after a trend is inserted
 #'@references COMPADRE Plant Matrix Database. Max Planck Institute for 
 #'Demographic Research (Germany). Available at www.compadre-db.org 
 #'(data downloaded on [1/1/2014]).
