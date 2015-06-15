@@ -36,11 +36,11 @@ calc_pv<-function(surv_mat, fert_mat, N0_data, nstage, years, stage2mod, beta){
   abundance<- calc_abundance(N0_data, surv_trend, fert_rand)
   
   ##survival regression
-  lm_surv<- surv_regr(surv_trend, years, stage2mod)
+  lm_surv<- surv_regr(surv_trend)
   pv_surv<-(lm_surv$coefficients[2,4])
   
   #calculating survival variance
-  surv_var=var(resid(lm_surv))
+  surv_var<-var(resid(lm_surv))
   
   ##abundance regression
   lm_abundance<- abundance_regr(abundance, years, stage2mod)
@@ -50,5 +50,9 @@ calc_pv<-function(surv_mat, fert_mat, N0_data, nstage, years, stage2mod, beta){
   lm_lambda<-lambda_regr(lambda)
   pv_lambda<-(lm_lambda$coefficients[2,4])
   
-  return(list("survival p-value"=pv_surv, "abundance p-value"=pv_abundance, "n surv=0"=surv_zero, "survival variance"=surv_var, "lambda p-value" = pv_lambda))
+  #lambda regression variance
+  lambda_var<-var(resid(lm_lambda))
+  
+  return(list("survival p-value"=pv_surv, "abundance p-value"=pv_abundance, "lambda p-value" = pv_lambda, 
+              "n surv=0"=surv_zero, "survival variance"=surv_var, "lambda variance"=lambda_var))
 }
