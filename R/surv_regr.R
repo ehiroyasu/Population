@@ -10,7 +10,13 @@
 #'
 
 surv_regr<- function(surv_trend, years, stage2mod){
-  stage_surv<- apply(surv_trend,c(2,3), sum)
-  lm_surv<- summary(lm(stage_surv[stage2mod,]~years))
+  survival<- apply(surv_trend,c(2,3), sum)
+  
+  library(reshape2)
+  survival<-melt(survival, varnames=c("stage", "year"))
+
+  lm_surv<- summary(lm(survival$value~survival$year+survival$stage))
+  
+ 
   return(lm_surv)
 }
