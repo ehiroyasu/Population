@@ -14,7 +14,7 @@
 
 surv_lessthan_alpha<- function(survival_pv, alpha){
 
-  prop__emog<-vector(length=length(alpha))
+  prop_demog<-vector(length=length(alpha))
    
   for (a in 1:length(alpha)){
       prop_demog[a]<-(sum(survival_pv<alpha[a]))/length(alpha)
