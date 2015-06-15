@@ -71,12 +71,13 @@ lambda_pv<-unlist(return_pv[3,])
 
 prop_demog<-surv_lessthan_alpha(survival_pv, alpha)
 prop_N<-abundance_lessthan_alpha(abundance_pv,alpha)
+prop_lambda<-lambda_lessthan_alpha(lambda_pv, alpha)
 
-diff_mean<-sum(prop_demog-prop_N)
+diff_mean<-sum(prop_demog-prop_lambda)
 delta<-0.01
 power<-diff_mean*delta
 
 ```{r, echo=FALSE}
-plot(prop_demog~alpha, col='blue', xlab='freq p<alpha', ylab='alpha', main='Frequence p is less than alpha')
-lines(n_pv~alpha, col='red')
+plot(prop_demog~alpha, col='blue', xlab='freq p<alpha', ylab='alpha', main='Frequency p is less than alpha')
+lines(prop_lambda~alpha, col='red')
 ```
