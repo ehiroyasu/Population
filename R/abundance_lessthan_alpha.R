@@ -1,10 +1,10 @@
 #'abundance_lessthan_alpha
 #'
-#'counting the number of times the p-value for survival and the p-value for abundance are les than alpha, this will 
+#'counting the number of times p-value for abundance is less than alpha, this will 
 #'allow us to assess power.
 #'
-#'@param abundance_pv is a vector of p-values for the regression of survival over time
-#'@param alpha is a vector of alpha values over which to test if survival is less than
+#'@param abundance_pv is a vector of p-values for the regression of abundance over time
+#'@param alpha is a vector of alpha values over which to test if abundance is less than
 #'
 #'@return prop_N a vector of proportional counts of the number of times the abundance p-value is less than the alpha value
 #'
