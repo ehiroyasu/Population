@@ -4,12 +4,11 @@
 #'modified survival matrices
 #'
 #'@param surv_trend array of survival matrices with inserted trend beta
-#'@param years the number of years in the simulation
 #'
 #'@author Elizabeth Hiroyasu
 #'
 
-surv_regr<- function(surv_trend, years, stage2mod){
+surv_regr<- function(surv_trend){
   survival<- apply(surv_trend,c(2,3), sum)
   
   library(reshape2)
