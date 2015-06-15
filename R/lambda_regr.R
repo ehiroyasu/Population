@@ -11,11 +11,7 @@
 
 
 lambda_regr<- function(lambda){
-  lambda_total<- apply(lambda,c(2,3), sum)
-  library(reshape2)
-  lambda_df<-melt(lambda_total, varnames=c("stage", "year"))
-
-  lm_lambda <- summary(lm(lambda_df$value~lambda_df$year+lambda_df$stage))
+  lm_lambda <- summary(lm(lambda~years))
   
   return(lm_lambda)
 }

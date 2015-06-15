@@ -26,5 +26,5 @@ calc_abundance<- function(N0_rand, surv_trend, fert_rand){
     #abundance<-N0_rand
     abundance[i+1,]<-trans_mat[,,i]%*%abundance[i,]
   }
-  return(abundance[-1,])
+  return(abundance)
 }
