@@ -5,6 +5,7 @@
 #'@param surv_trend calculated from trend function
 #'@param N0_rand a random matrix of 10 years of initial population data
 #'@param fert_mat fertility matrix from COMPADRE database
+#'
 #'@references COMPADRE Plant Matrix Database. Max Planck Institute for 
 #'Demographic Research (Germany). Available at www.compadre-db.org 
 #'(data downloaded on [1/1/2014]).
