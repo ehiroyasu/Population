@@ -18,14 +18,14 @@
 #'@author Elizabeth Hiroyasu
 #'
 
-Load_Compadre_Data <- function(Compadre_file){
-  load(Compadre_file)
+Load_Compadre_Data <- function(CompadreFile){
+  load(CompadreFile)
   ##subset to all the metadata first
   metadata<- subset(compadre$metadata)
 
   ##then refine by specified components
   tempMetadata <- subset(metadata, MatrixComposite == "Individual" & MatrixTreatment == "Unmanipulated"
-                         & GrowthType =="Herbaceous perennial" & StudyDuration >= 10 & MatrixDimension >= 3 &
+                         & GrowthType =="Herbaceous perennial" & StudyDuration >= 5 & MatrixDimension >= 3 &
                            MatrixCaptivity =="W" & MatrixSplit == "Divided")
   keep <- as.numeric(rownames(tempMetadata))
   #tempMetadata$tempMat <- compadre$mat[keep]
