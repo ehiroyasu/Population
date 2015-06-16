@@ -47,6 +47,7 @@ calc_pv<-function(surv_mat, fert_mat, N0_data, nstage, years, stage2mod, beta, a
   N_active <- abundance[,active_stages]
   Nt <- apply(N_active, 1, sum)
   lambda<- Nt[-1]/Nt[-length(Nt)]
+    lambda[is.na(lambda)]<-0
   
   
   ##lambda regression:
