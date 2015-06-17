@@ -22,8 +22,7 @@ Load_Compadre_Data <- function(CompadreFile){
   load(CompadreFile)
   ##subset to all the metadata first
   metadata<- subset(compadre$metadata)
-  matrix_class<-compadre$matrixClass
-  
+
   ##then refine by specified components
   tempMetadata <- subset(metadata, MatrixComposite == "Individual" & MatrixTreatment == "Unmanipulated"
                          & GrowthType =="Herbaceous perennial" & StudyDuration >= 5 & MatrixDimension >= 3 &
@@ -33,5 +32,5 @@ Load_Compadre_Data <- function(CompadreFile){
   
   #tempMetadata$tempMat <- compadre$mat[keep]
   
-  return(list(metadata=tempMetadata, mat=compadre$mat[keep], mat_class=matrix_class[keep]))
+  return(list(metadata=tempMetadata, mat=compadre$mat[keep], mat_class=compadre$matrixClass))
 }
