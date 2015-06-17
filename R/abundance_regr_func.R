@@ -6,6 +6,7 @@
 #'@param abundance array of abundance matrices calculated from transition matrices
 #'with modified survival
 #'@param years the number of years in the simulation
+#'@param active_stages is the stages of the species that are active (as opposed to dormant or propagule)
 #'
 #'@author Elizabeth Hiroyasu
 #'

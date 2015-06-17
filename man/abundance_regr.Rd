@@ -4,7 +4,7 @@
 \alias{abundance_regr}
 \title{abundance_regression}
 \usage{
-abundance_regr(abundance, years, stage2mod)
+abundance_regr(abundance, years, active_stages)
 }
 \arguments{
 \item{abundance}{array of abundance matrices calculated from transition matrices
