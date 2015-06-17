@@ -59,6 +59,7 @@ N0_data <- load_N0()
 cipi_nx<- subset(N0_data, POP =="CIPI_1")
 nx_str<- cipi_nx$Nx
 N0_data<-output_N0(nx_str, years=1:10, nstage)
+years <- 1:10
 ```
 
 To introduce simulations to compare p-values using the functions in the Demographic Trend Package:
