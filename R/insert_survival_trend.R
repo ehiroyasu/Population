@@ -20,17 +20,19 @@
 insert_survival_trend<- function(surv_rand, beta, nstage, stage2mod, years){
   
   surv_trend <- surv_rand
-  for (i in years){
-    survival <- sum(surv_trend[,stage2mod,i])
-    surv_trend[,stage2mod,i] <- surv_trend[,stage2mod,i] * (survival-beta*i)/survival
-  }
+ 
   #if stage2mod is a vector, and we are adding a trend to survival in multiple stages
   if(is.vector(stage2mod)){
     survival<-colSums(surv_trend)[stage2mod,]
     for (i in years){
       for (j in stage2mod){
-        surv_trend[,j,i] <- surv_trend[,j,i] * (survival[i]-beta*i)/survival[i]
+        surv_trend[,j,i] <- surv_trend[,j,i] * (survival[j]-beta*i)/survival[j]
       }
+    }
+  } else {
+    for (i in years){
+      survival <- sum(surv_trend[,stage2mod,i])
+      surv_trend[,stage2mod,i] <- surv_trend[,stage2mod,i] * (survival-beta*i)/survival
     }
   }
    
