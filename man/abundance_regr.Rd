@@ -11,6 +11,8 @@ abundance_regr(abundance, years, active_stages)
 with modified survival}
 
 \item{years}{the number of years in the simulation}
+
+\item{active_stages}{is the stages of the species that are active (as opposed to dormant or propagule)}
 }
 \description{
 Runs a regression analysis examining the power of detecting a trend in

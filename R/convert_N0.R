@@ -14,15 +14,12 @@
 #'
 #'@author Elizabeth Hiroyasu
 
-
 convert_nx <- function(nx_str){
   nx_str<-substr(nx_str, 2, nchar(nx_str)-1)
   nx_str<-gsub(' ', ',', nx_str)
   nx_str<-paste('c(',nx_str,')',sep='')
-  nx <-eval(parse(text=nx_str))
+  nx <- eval(parse(text=nx_str))
   nx<-matrix(nx, nrow=length(nx), byrow=T)
   nx<-as.vector(nx)
-  
-  return(list(nx_str, nx))
+  return(nx) 
 }
-

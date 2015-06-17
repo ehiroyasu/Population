@@ -11,6 +11,7 @@
 
 
 lambda_regr<- function(lambda){
+  
   lm_lambda <- summary(lm(lambda~years))
   
   return(lm_lambda)
