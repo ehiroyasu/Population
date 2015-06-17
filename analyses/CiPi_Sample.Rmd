@@ -70,7 +70,8 @@ This code can be adjusted to increase the number of replications and returns a l
 
 To look at differences in survival and lambda:
 ```{r}
-alpha<-seq(from=0.01, to=0.2, by=0.001)
+alpha<-seq(from=0.01, to=0.2, by=delta)
+delta<-0.001
 
 survival_pv<-unlist(return_pv[1,])
 abundance_pv<-unlist(return_pv[2,])
@@ -81,8 +82,6 @@ prop_N<-abundance_lessthan_alpha(abundance_pv,alpha)
 prop_lambda<-lambda_lessthan_alpha(lambda_pv, alpha)
 
 diff_mean<-sum(prop_demog-prop_lambda)
-delta<-0.01
-power<-diff_mean*delta
 ```
 
 ```{r, echo=FALSE}
