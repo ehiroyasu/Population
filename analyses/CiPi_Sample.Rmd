@@ -68,9 +68,9 @@ return_pv<-replicate(1000, calc_pv(surv_mat, fert_mat, N0_data, nstage, years=1:
 ```
 This code can be adjusted to increase the number of replications and returns a list of p-values for the survival and abundance regressions.
 
-To look at differences in survival and abundance:
+To look at differences in survival and lambda:
 ```{r}
-alpha<-seq(from=0.01, to=0.2, by=0.01)
+alpha<-seq(from=0.01, to=0.2, by=0.001)
 
 survival_pv<-unlist(return_pv[1,])
 abundance_pv<-unlist(return_pv[2,])
@@ -86,6 +86,6 @@ power<-diff_mean*delta
 ```
 
 ```{r, echo=FALSE}
-plot(prop_demog~alpha, type='l', col='blue', xlab='freq p<alpha', ylab='alpha', main='Frequency p is less than alpha')
+plot(prop_demog~alpha, type='l',col='blue', xlab='alpha', ylab='freq p<alpha', main='Frequency p is less than alpha')
 lines(prop_lambda~alpha, col='red')
 ```
