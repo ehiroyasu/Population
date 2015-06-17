@@ -53,12 +53,8 @@ Creating N0 data
 #calculating the number of stages in the matrix:
 nstage<-1:dim(surv_mat)[1]
 
-N0_data <- load_N0()
+N0_data<-gen_N0(trans_mat)
 
-##subsetting the data for cipi data
-cipi_nx<- subset(N0_data, POP =="CIPI_1")
-nx_str<- cipi_nx$Nx
-N0_data<-output_N0(nx_str, years=1:10, nstage)
 years <- 1:10
 ```
 
