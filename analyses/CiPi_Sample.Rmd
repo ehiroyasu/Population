@@ -55,7 +55,6 @@ Creating N0 data
 nstage<-1:dim(surv_mat)[1]
 
 N0_data<-gen_N0(trans_mat)
-
 ```
 
 To introduce simulations to compare p-values using the functions in the Demographic Trend Package:
@@ -79,10 +78,19 @@ prop_demog<-pv_lessthan_alpha(pvalue=survival_pv, alpha)
 prop_N<-pv_lessthan_alpha(pvalue=abundance_pv,alpha)
 prop_lambda<-pv_lessthan_alpha(pvalue=lambda_pv, alpha)
 
-diff<-sum(prop_demog-prop_lambda)
+diff<-(prop_lambda-prop_demog)
 ```
 
 ```{r, echo=FALSE}
 plot(prop_demog~alpha, type='l',col='blue', xlab='alpha', ylab='freq p<alpha', main='Frequency p is less than alpha')
 lines(prop_lambda~alpha, col='red')
+abline(lm_surv)
+legend("bottomright", c("Survival p-values", "Lambda p-values"), col=c("blue","red"), lty=c(1,1))
+
+plot(survival_pv~lambda_pv, col=c("blue", "red"))
+abline(0,1)
+legend("topleft", c("Survival p-values", "Lambda p-values"), col=c("blue","red"), lty=c(1,1))
+
+
+hist(diff)
 ```

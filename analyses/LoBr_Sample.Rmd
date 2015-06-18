@@ -46,7 +46,7 @@ trans_mat<-(extract_mat(MatrixData))$"transition matrices"
 ```
 
 # Analysis
-Unlike the Cirsium pitcheri example we worked on previously, we will not be using observed population vectors. Instead we will generate N0 vectors from the transition matrices using the DemographicTrend package:
+First, we will generate N0 vectors from the transition matrices using the DemographicTrend package:
 
 ```{r, gen_N0}
 N0_data<-gen_N0(trans_mat)
@@ -55,7 +55,7 @@ N0_data<-gen_N0(trans_mat)
 
 To introduce simulations to compare p-values using the functions in the Demographic Trend Package:
 ```{r}
-return_pv<-replicate(10000, calc_pv(surv_mat, fert_mat, N0_data, nstage, years=1:10, stage2mod=1:3, beta=0.01))
+return_pv<-replicate(10000, calc_pv(surv_mat, fert_mat, N0_data, nstage, years=1:10, stage2mod=1:3, beta=0.1))
 
 ```
 This code can be adjusted to increase the number of replications and returns a list of p-values for the survival and abundance regressions.
@@ -68,16 +68,22 @@ survival_pv<-unlist(return_pv[1,])
 abundance_pv<-unlist(return_pv[2,])
 lambda_pv<-unlist(return_pv[3,])
 
-prop_demog<-surv_lessthan_alpha(survival_pv, alpha)
-prop_N<-abundance_lessthan_alpha(abundance_pv,alpha)
-prop_lambda<-lambda_lessthan_alpha(lambda_pv, alpha)
+prop_demog<-pv_lessthan_alpha(survival_pv, alpha)
+prop_N<-pv_lessthan_alpha(abundance_pv,alpha)
+prop_lambda<-pv_lessthan_alpha(lambda_pv, alpha)
 
 diff_mean<-sum(prop_demog-prop_lambda)
 delta<-0.01
-power<-diff_mean*delta
+
 ```
 
 ```{r, echo=FALSE}
 plot(prop_demog~alpha, type='l',col='blue', xlab='alpha', ylab='freq p<alpha', main='Frequency p is less than alpha')
 lines(prop_lambda~alpha, col='red')
+legend("bottomright", c("Survival p-values", "Lambda p-values"), col=c("blue","red"), lty=c(1,1))
+
+
+plot(survival_pv~lambda_pv, col=c("blue", "red"), xlim=c(0,0.05), ylim=c(0,0.05))
+abline(0,1)
+legend("topleft", c("Survival p-values", "Lambda p-values"), col=c("blue","red"), lty=c(1,1))
 ```

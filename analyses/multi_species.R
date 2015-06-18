@@ -1,14 +1,5 @@
 
 
-species_names<-c("Lomatium_Bradshawii", "Cirsium_dissectum", "Cimicifuga_elata")
-species<-vector("list", length(species_names))
-names(species)<-species_names
-
-
-for (k in length(species)){
-  plant<-species
-    plant[k]<-subset(mydata$metadata, SpeciesAuthor==species[k])
-}
 
 
 pop_list <- unique(cbind(mydata$metadata$SpeciesAuthor,mydata$metadata$Population))
@@ -22,7 +13,25 @@ for (k in 1:num_pops) {
   save<-as.numeric(rownames(temp))
   MatrixData<- as.array(mydata$mat[mydata$metadata$SpeciesAuthor==pop_list[k,1] & mydata$metadata$Population==pop_list[k,2]])
   MatClass<-mydata$mat_class[save]
-  print(pop_list[k,])
+
+  active_stages<-subset(MatClass[[1]]$MatrixClassNumber, MatClass[[1]]$MatrixClassOrganized=='active')
+
+  ##pulling out CiPi survival matrices
+  surv_mat<-(extract_mat(MatrixData))$"survival matrices"
   
-  # Insert rest of analysis
+  ##pulling out CiPi fertility matrices
+  fert_mat<-(extract_mat(MatrixData))$"fertility matrices"
+  
+  ##pulling out CiPi transition matrices
+  trans_mat<-(extract_mat(MatrixData))$"transition matrices"
+  
+  #calculating the number of stages in the matrix:
+  nstage<-1:dim(surv_mat)[1]
+  
+  N0_data<-gen_N0(trans_mat)
+  
+  return_pv<-replicate(10, calc_pv(surv_mat, fert_mat, N0_data, nstage, years=1:10, stage2mod=1:3, beta=0.01))
+  
+  print(return_pv[k,])  
+  
 }
