@@ -35,7 +35,7 @@ insert_survival_trend<- function(surv_rand, beta, nstage, stage2mod, years){
       surv_trend[,stage2mod,i] <- surv_trend[,stage2mod,i] * (survival-beta*i)/survival
     }
   }
-   
+  surv_na<- sum(surv_trend[is.na(surv_trend)])+sum(surv_trend[is.infinite(surv_trend)])
   surv_trend[is.na(surv_trend)]<-0
   surv_trend[surv_trend<0]<-0
   surv_trend[is.infinite(surv_trend)]<-0
@@ -43,6 +43,6 @@ insert_survival_trend<- function(surv_rand, beta, nstage, stage2mod, years){
   #counting the number of times survival goes to zero for the stage we have added a trend into
   surv_zero<-sum(surv_trend[,stage2mod,]==0)
   
-  return(list(surv_trend, surv_zero))
+  return(list(surv_trend, surv_zero, surv_na))
 }
 
