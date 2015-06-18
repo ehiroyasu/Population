@@ -5,6 +5,7 @@
 #'@param surv_trend calculated from trend function
 #'@param N0_rand a random matrix of 10 years of initial population data
 #'@param fert_mat fertility matrix from COMPADRE database
+#'@param years is the number of years in simulation
 #'
 #'@references COMPADRE Plant Matrix Database. Max Planck Institute for 
 #'Demographic Research (Germany). Available at www.compadre-db.org 
@@ -19,7 +20,7 @@
 #'@author Elizabeth Hiroyasu
 
 
-calc_abundance<- function(N0_rand, surv_trend, fert_rand){
+calc_abundance<- function(N0_data, surv_trend, fert_rand, years){
   trans_mat<- surv_trend + fert_rand
   abundance <- matrix(nrow=length(years)+1, ncol=(dim(surv_trend)[1]))
   abundance[1,] <- N0_data[sample(nrow(N0_data), size=1),]

@@ -14,6 +14,7 @@ The data file needs to be in the working directory. It can be downloaded from ht
 
 ```{r}
 library(DemographicTrend)
+
 CompadreFile <- "COMPADRE_10_11_2014_version_3.0.Rdata"
 mydata <- Load_Compadre_Data(CompadreFile)
 ```
@@ -55,7 +56,6 @@ nstage<-1:dim(surv_mat)[1]
 
 N0_data<-gen_N0(trans_mat)
 
-years <- 1:10
 ```
 
 To introduce simulations to compare p-values using the functions in the Demographic Trend Package:
@@ -67,18 +67,19 @@ This code can be adjusted to increase the number of replications and returns a l
 
 To look at differences in survival and lambda:
 ```{r}
-alpha<-seq(from=0.01, to=0.2, by=delta)
 delta<-0.001
+alpha<-seq(from=0.01, to=0.2, by=delta)
+
 
 survival_pv<-unlist(return_pv[1,])
 abundance_pv<-unlist(return_pv[2,])
 lambda_pv<-unlist(return_pv[3,])
 
-prop_demog<-surv_lessthan_alpha(survival_pv, alpha)
-prop_N<-abundance_lessthan_alpha(abundance_pv,alpha)
-prop_lambda<-lambda_lessthan_alpha(lambda_pv, alpha)
+prop_demog<-pv_lessthan_alpha(pvalue=survival_pv, alpha)
+prop_N<-pv_lessthan_alpha(pvalue=abundance_pv,alpha)
+prop_lambda<-pv_lessthan_alpha(pvalue=lambda_pv, alpha)
 
-diff_mean<-sum(prop_demog-prop_lambda)
+diff<-sum(prop_demog-prop_lambda)
 ```
 
 ```{r, echo=FALSE}

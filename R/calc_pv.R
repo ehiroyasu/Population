@@ -30,7 +30,7 @@ calc_pv<-function(surv_mat, fert_mat, N0_data, nstage, years, stage2mod, beta, a
   surv_zero <- insert_survival_trend(surv_rand, beta, nstage, stage2mod, years)[[2]]
   
   ##calculating new abundance matrices
-  abundance<- calc_abundance(N0_data, surv_trend, fert_rand)
+  abundance<- calc_abundance(N0_data, surv_trend, fert_rand, years)
   
   ##survival regression
   lm_surv<- surv_regr(surv_trend)
@@ -51,7 +51,7 @@ calc_pv<-function(surv_mat, fert_mat, N0_data, nstage, years, stage2mod, beta, a
   
   
   ##lambda regression:
-  lm_lambda<-lambda_regr(lambda)
+  lm_lambda<-lambda_regr(lambda, years)
   pv_lambda<-(lm_lambda$coefficients[2,4])
   
   #lambda regression variance

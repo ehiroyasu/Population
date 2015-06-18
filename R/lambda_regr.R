@@ -4,13 +4,14 @@
 #'modified lambda matrices
 #'
 #'@param lambda is a 3d array of lambda matrices
+#'@param years number of years in simulation
 #'
 #'@author Elizabeth Hiroyasu
 #'
 
 
 
-lambda_regr<- function(lambda){
+lambda_regr<- function(lambda, years){
   
   lm_lambda <- summary(lm(lambda~years))
   
