@@ -14,26 +14,33 @@
 #'
 
 
-calc_pv<-function(surv_mat, fert_mat, N0_data, nstage, years, stage2mod, beta, active_stages){
+calc_pv<-function(surv_mat, fert_mat, N0_data, nstage, years, stage2mod, beta, active_stages, verbose=FALSE){
   #sampling random survival matrices and fertility matrices with n years in simulation
   i_rand <- sample(1:dim(surv_mat)[3], size=length(years), replace=T)
   surv_rand <- surv_mat[,,i_rand]
   fert_rand <- fert_mat[,,i_rand]
   
+  trans_mat <- surv_mat+fert_mat
+  N0_data<-gen_N0(trans_mat)
   
   #calculating the variance in survival:
   #surv_mad<- calc_surv_mad(surv_rand, stage2mod, years)
    
   ##to modify stage 2 survival, use trend function
-  surv_trend <- insert_survival_trend(surv_rand, beta, nstage, stage2mod, years)[[1]]
+  temp <- insert_survival_trend(surv_rand, beta, nstage, stage2mod, years, verbose)
+  surv_trend <- temp[[1]]
   ##to print the number of times the survival goes to zero in the stages where a trend has been inserted
-  surv_zero <- insert_survival_trend(surv_rand, beta, nstage, stage2mod, years)[[2]]
+  surv_zero <- temp[[2]]
   
   ##calculating new abundance matrices
   abundance<- calc_abundance(N0_data, surv_trend, fert_rand, years)
+  if (verbose) {
+    print(abundance)
+    plot(abundance[,active_stages])
+  }
   
   ##survival regression
-  lm_surv<- surv_regr(surv_trend)
+  lm_surv<- surv_regr(surv_trend, active_stages)
   pv_surv<-(lm_surv$coefficients[2,4])
   
   #calculating survival variance
@@ -49,6 +56,10 @@ calc_pv<-function(surv_mat, fert_mat, N0_data, nstage, years, stage2mod, beta, a
   lambda<- Nt[-1]/Nt[-length(Nt)]
     lambda[is.na(lambda)]<-0
   
+    if(verbose) {
+      plot(lambda)
+      matplot(t(apply(surv_trend,c(2:3),sum)))
+    }
   
   ##lambda regression:
   lm_lambda<-lambda_regr(lambda, years)

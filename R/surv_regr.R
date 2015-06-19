@@ -8,8 +8,8 @@
 #'@author Elizabeth Hiroyasu
 #'
 
-surv_regr<- function(surv_trend){
-  survival<- apply(surv_trend,c(2,3), sum)
+surv_regr<- function(surv_trend, active_stages){
+  survival<- apply(surv_trend[,active_stages,],c(2,3), sum)
   
   library(reshape2)
   survival<-melt(survival, varnames=c("stage", "year"))
