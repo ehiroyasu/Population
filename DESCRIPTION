@@ -4,6 +4,6 @@ Version: 1.11
 Authors@R: c(person("Elizabeth", "Hiroyasu", email="ehiroyasu@bren.ucsb.edu", role = c("aut", "cre")), 
   person("Bruce", "Kendall", email="kendall@bren.ucsb.edu", role = "aut"))
 Description: This package includes a variety of functions which can be used to insert a trend in population vital rates in order to examine the ability to detect a trend in a population by measuring population vital rates or total abundance. 
-Depends: R (>= 3.1.1), roxygen2, devtools
+Depends: R (>= 3.1.1), roxygen2, devtools, popbio, quadprog, reshape2
 License: What license is it under?
 LazyData: true
