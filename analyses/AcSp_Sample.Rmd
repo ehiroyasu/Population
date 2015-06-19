@@ -1,12 +1,11 @@
 ---
-title: "Lomatium bradshawii"
+title: "Actaea spicata Sample"
 author: "Elizabeth Hiroyasu"
-date: "Tuesday, May 19, 2015"
+date: "June 19, 2015"
 output: html_document
 ---
 
-This analysis explores the use of the demographic trend package for the species Lomatium bradshawii, Bradshaw's desert parsley. This is an endangered, herbaceous perennial that occurs in Oregon and Washington. Primary threats to L. bradshawii are habitat loss. To download the matrix population data for this species, visit the compadre website at 
-http://www.compadre-db.org.
+This analysis explores the use of the demographic trend package for the species Actaea spicata, Eurasian baneberry. This is a poisonous, herbaceous perennial that was introduced to the lower 48 of the US and currently occurs in NJ. To download the matrix population data for this species, visit the compadre website at http://www.compadre-db.org.
 
 # Data loading
 Load in the Compadre data and take the default selection
@@ -18,13 +17,14 @@ Compadre_file <- "COMPADRE_10_11_2014_version_3.0.Rdata"
 mydata <- Load_Compadre_Data(Compadre_file)
 ```
 
-#Subsetting the data to the focal species
+# Subsetting the data to the focal species
 ```{r}
-LoBr<-subset(mydata$metadata, SpeciesAuthor=="Lomatium_bradshawii")
+AcSp<-subset(mydata$metadata, SpeciesAuthor=="Actaea_spicata" & Population =='Site A')
 
 #pulling out LoBr Matrices
-save<-as.numeric(rownames(LoBr))
-MatrixData<- as.array(mydata$mat[mydata$metadata$SpeciesAuthor=="Lomatium_bradshawii"])
+save<-as.numeric(rownames(AcSp))
+MatrixData<- as.array(mydata$mat[mydata$metadata$SpeciesAuthor=="Actaea_spicata" & mydata$metadata$Population=='Site A'])
+
 MatClass<-mydata$mat_class[save]
 ```
 
@@ -47,7 +47,6 @@ trans_mat<-(extract_mat(MatrixData))$"transition matrices"
 
 ## Analysis
 First, we will generate N0 vectors from the transition matrices using the DemographicTrend package:
-
 ```{r, gen_N0}
 N0_data<-gen_N0(trans_mat)
 ```
@@ -87,6 +86,6 @@ plot(survival_pv~lambda_pv, col=c("blue", "red"), main='Survival p-value vs. Lam
 abline(0,1)
 legend("topleft", c("Survival p-values", "Lambda p-values"), col=c("blue","red"), lty=c(1,1))
 
-hist(diff, main='difference of lambda_pv minus survival_pv')
+hist(diff, main='difference of lambda_pv minus survival_pv at beta=0.01')
 
 ```
