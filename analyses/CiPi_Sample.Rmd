@@ -7,7 +7,7 @@ output: html_document
 
 This is a sample analysis using the demographic trend package for a population of Cirsium pitcheri.
 
-# Data loading
+**Data loading**
 Load in the Compadre data and take the default selection
 The data file needs to be in the working directory. It can be downloaded from http://www.compadre-db.org.
 
@@ -37,31 +37,24 @@ active_stages<-subset(MatClass[[1]]$MatrixClassNumber, MatClass[[1]]$MatrixClass
 
 Extract the matrices
 ```{r}
+temp<- extract_mat(MatrixData)
+
 ##pulling out CiPi survival matrices
-surv_mat<-(extract_mat(MatrixData))$"survival matrices"
+surv_mat<-temp$"survival matrices"
 
 ##pulling out CiPi fertility matrices
-fert_mat<-(extract_mat(MatrixData))$"fertility matrices"
+fert_mat<-temp$"fertility matrices"
 
 ##pulling out CiPi transition matrices
-trans_mat<-(extract_mat(MatrixData))$"transition matrices"
+trans_mat<-temp$"transition matrices"
 ```
 
-
-Creating N0 data
-```{r}
-#calculating the number of stages in the matrix:
-nstage<-1:dim(surv_mat)[1]
-
-N0_data<-gen_N0(trans_mat)
-```
-
-#Running simulations:
+**Running simulations:**
 To introduce simulations to compare p-values using the functions in the Demographic Trend Package:
-```{r}
-return_pv<-replicate(1000, calc_pv(surv_mat, fert_mat, N0_data, nstage, years=1:10, stage2mod=1:3, beta=0.01))
-
+```{r, return_pv, cache=TRUE}
+return_pv<-replicate(10000, calc_pv(surv_mat, fert_mat, trans_mat, N0_data, nstage, years=1:10, stage2mod=c(1,2), beta=0.01, active_stages = active_stages))
 ```
+
 This code can be adjusted to increase the number of replications and returns a list of p-values for the survival and abundance regressions.
 
 To look at differences in survival and lambda:
@@ -69,27 +62,28 @@ To look at differences in survival and lambda:
 delta<-0.001
 alpha<-seq(from=0.01, to=0.2, by=delta)
 
-
 survival_pv<-unlist(return_pv[1,])
 abundance_pv<-unlist(return_pv[2,])
 lambda_pv<-unlist(return_pv[3,])
 
-prop_demog<-pv_lessthan_alpha(pvalue=survival_pv, alpha)
-prop_N<-pv_lessthan_alpha(pvalue=abundance_pv,alpha)
-prop_lambda<-pv_lessthan_alpha(pvalue=lambda_pv, alpha)
+prop_demog<-pv_lessthan_alpha(survival_pv, alpha)
+prop_N<-pv_lessthan_alpha(abundance_pv,alpha)
+prop_lambda<-pv_lessthan_alpha(lambda_pv, alpha)
 
-diff<-(prop_lambda-prop_demog)
+diff<-prop_lambda-prop_demog
 ```
 
+#Plots
 ```{r, echo=FALSE}
-plot(prop_demog~alpha, type='l',col='blue', xlab='alpha', ylab='freq p<alpha', main='Frequency p is less than alpha', xlim=c(0,0.2), ylim=c(0,0.1))
+plot(prop_demog~alpha, type='l',col='blue', xlab='alpha', ylab='freq p<alpha', main='Frequency p-value is less than alpha', xlim=c(0,0.2), ylim=c(0,0.5))
 lines(prop_lambda~alpha, col='red')
-legend("bottomright", c("Survival p-values", "Lambda p-values"), col=c("blue","red"), lty=c(1,1))
-
-
-plot(survival_pv~lambda_pv, col=c("blue", "red"), main='Survival p-value vs. Lambda p-value')
-abline(0,1)
 legend("topleft", c("Survival p-values", "Lambda p-values"), col=c("blue","red"), lty=c(1,1))
 
-hist(diff, main='difference of lambda_pv minus survival_pv at beta=0.01')
+
+plot(survival_pv~lambda_pv, main='Survival p-value vs. Lambda p-value', xlab='lambda p-values', ylab='survival p-values')
+abline(0,1)
+
+hist(lambda_pv-survival_pv, main='difference of lambda_pv minus survival_pv at beta=0.01')
+hist(lambda_pv, main='Histogram of lambda p-values')
+hist(survival_pv, main='Histgram of survival p-values')
 ```
