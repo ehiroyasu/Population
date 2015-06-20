@@ -15,9 +15,10 @@ pv_lessthan_alpha<- function(pvalue, alpha){
   
   prop<-vector(length=length(alpha))
   
-  for (a in 1:length(alpha)){
-    prop[a]<-(sum(pvalue<alpha[a]))/length(pvalue)
-  }
+    for (a in 1:length(alpha)){
+      prop[a]<-(sum(pvalue<alpha[a]))/length(pvalue)
+    }
+  
   return(prop)
 }
 
