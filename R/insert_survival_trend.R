@@ -23,7 +23,7 @@ insert_survival_trend<- function(surv_rand, beta, nstage, stage2mod, years, verb
  
   #if stage2mod is a vector, and we are adding a trend to survival in multiple stages
   if(is.vector(stage2mod)){
-#    survival<-colSums(surv_trend)[stage2mod,]
+
     for (i in years){
       for (j in stage2mod){
         survival <- sum(surv_trend[,j,i])
@@ -37,14 +37,14 @@ insert_survival_trend<- function(surv_rand, beta, nstage, stage2mod, years, verb
     }
   }
   if (verbose) print(surv_trend)
-  surv_na<- sum(surv_trend[is.na(surv_trend)])+sum(surv_trend[is.infinite(surv_trend)])
+  surv_na<- (sum(surv_trend[,stage2mod,]=="NaN" & surv_trend[,stage2mod,]=="Inf"))
+  
   surv_trend[is.na(surv_trend)]<-0
   surv_trend[surv_trend<0]<-0
   surv_trend[is.infinite(surv_trend)]<-0
   
   #counting the number of times survival goes to zero for the stage we have added a trend into
-  surv_zero<-sum(surv_trend[,stage2mod,]==0)
-  surv_zero <- sum(apply(surv_trend[,stage2mod,],2:3,sum)==0)
+  surv_zero <- sum(apply(surv_trend[,stage2mod,],c(2,3),sum)==0)
   
   return(list(surv_trend, surv_zero, surv_na))
 }
