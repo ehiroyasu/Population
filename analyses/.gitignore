@@ -1,7 +1,13 @@
 LoBr_Sample_files
 COMPADRE_10_11_2014_version_3.0.RData
 AcSp_Sample_files
+<<<<<<< HEAD
 AcSp_Sample_cache
 CiPi_Sample_cache
 CiPi_Sample_files
 LoBr_Sample_cache
+=======
+Transition_Matrices.txt
+CiPi_Sample_cache
+CiPi_Sample_files
+>>>>>>> fca74b3c3fef7756acac5800dec619edafd1a59f
