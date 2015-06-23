@@ -7,9 +7,10 @@ pop_list <- unique(cbind(mydata$metadata$SpeciesAuthor,mydata$metadata$Populatio
 num_pops <- dim(pop_list)[1]
 num_pops <- 5 # for debugging
 
+output <- list(NULL)
+
 for (k in 1:num_pops) {
   temp<-subset(mydata$metadata, SpeciesAuthor==pop_list[k,1] & Population==pop_list[k,2])
-  
   #extracting Matrices
   save<-as.numeric(rownames(temp))
   MatrixData<- as.array(mydata$mat[mydata$metadata$SpeciesAuthor==pop_list[k,1] & mydata$metadata$Population==pop_list[k,2]])
