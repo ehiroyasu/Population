@@ -19,7 +19,5 @@ analyze_pv<-function(alpha, return_pv){
   prop_N<-pv_lessthan_alpha(pvalue=abundance_pv,alpha)
   prop_lambda<-pv_lessthan_alpha(pvalue=lambda_pv, alpha)
 
-  prop_demog_0.05<-pv_lessthan_alpha(pvalue=survival_pv, alpha=0.05)
-  prop_lambda_0.05<-pv_lessthan_alpha(pvalue=lambda_pv, alpha=0.05)
-  
-  return(list(survival_pv, abundance_pv, lambda_pv, prop_demog, prop_N, prop_lambda, prop_demog_0.05, prop_lambda_0.05))
+  return(list('survival_pv'=survival_pv, 'abundance_pv'=abundance_pv, 'lambda_pv'=lambda_pv, 'prop_demog'=prop_demog, 'prop_N'=prop_N, 'prop_lambda'=prop_lambda))
+}
