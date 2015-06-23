@@ -82,5 +82,5 @@ abline(0,1)
 
 hist(lambda_pv-survival_pv, main='difference of lambda_pv minus survival_pv at beta=0.01')
 hist(lambda_pv, main='Histogram of lambda p-values')
-hist(survival_pv, main='Histgram of survival p-values')
+hist(survival_pv, main='Histogram of survival p-values')
 ```
