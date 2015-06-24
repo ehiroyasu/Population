@@ -5,7 +5,7 @@ mydata <- Load_Compadre_Data(CompadreFile)
 
 pop_list <- unique(cbind(mydata$metadata$SpeciesAuthor,mydata$metadata$Population))
 num_pops <- dim(pop_list)[1]
-num_pops <- 5 # for debugging
+num_pops <- 2 # for debugging
 
 output <- list(NULL)
 
@@ -44,7 +44,9 @@ for (k in 1:num_pops) {
 plots<-plot_pv(output=output[[1]], alpha)
 
 #plotting for multiple species:
-for (k in 1:3){
+for (k in 1:num_pops){
+  pdf(output[[k]]$names)
   plots[[k]]<-plot_pv(output=output[[k]], alpha)
+  dev.off()
 }
 
