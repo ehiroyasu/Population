@@ -3,8 +3,6 @@ library(DemographicTrend)
 CompadreFile <- "COMPADRE_10_11_2014_version_3.0.Rdata"
 mydata <- Load_Compadre_Data(CompadreFile)
 
-
-
 pop_list <- unique(cbind(mydata$metadata$SpeciesAuthor,mydata$metadata$Population))
 num_pops <- dim(pop_list)[1]
 num_pops <- 2 # for debugging
