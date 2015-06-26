@@ -6,6 +6,8 @@ mydata <- Load_Compadre_Data(CompadreFile)
 pop_list <- unique(cbind(mydata$metadata$SpeciesAuthor,mydata$metadata$Population))
 num_pops <- dim(pop_list)[1]
 num_pops <- 2 # for debugging
+delta=0.001
+alpha=seq(from=0.01, to=0.2, by=delta)
 
 output <- list(NULL)
 
@@ -32,21 +34,29 @@ for (k in 1:num_pops) {
   return_pv<-replicate(100, calc_pv(surv_mat, fert_mat, trans_mat, N0_data, nstage, years=1:10, stage2mod=active_stages, beta=0.01, active_stages = active_stages))
   
   #Analysis
-  delta=0.001
-  alpha=seq(from=0.01, to=0.2, by=delta)
   output[[k]]<-analyze_pv(alpha, return_pv)
-  
   output[[k]]<-c(output[[k]], names=list(pop_list[k,]))
   
 }
 
+save(output, file="Pop_dem_Output_data.Rdata")
+
 ##plotting for a single species:
-plots<-plot_pv(output=output[[1]], alpha)
+plots<-plot_pv(output[[1]], alpha)
 
 #plotting for multiple species:
+#first create a vector of names
+names<-vector(length=length(pop_list[,1]))
+for(i in 1:length(names)){
+  names[i]<-paste(pop_list[i,], collapse="  ")
+}
+
+#plot to pdf
 for (k in 1:num_pops){
-  pdf(output[[k]]$names)
+
+  pdf(paste("plot", names[k], ".pdf", sep=" "), height=20)
   plots[[k]]<-plot_pv(output=output[[k]], alpha)
   dev.off()
 }
+
 
