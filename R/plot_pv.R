@@ -9,16 +9,43 @@
 #'@author Elizabeth Hiroyasu
 
 plot_pv<-function(output, alpha){
-  plot(output$prop_demog~alpha, type='l',col='blue', xlab='alpha', ylab='freq p<alpha', main=output$names, xlim=c(0,0.2), ylim=c(0,1))
-  lines(output$prop_lambda~alpha, col='red')
-  legend("topleft", c("Survival p-values", "Lambda p-values"), col=c("blue","red"), lty=c(1,1))
+  library(ggplot2)
+  library(reshape2)
+  library(grid)
+  library(gridExtra)
   
-  plot(output$survival_pv~output$lambda_pv, main='Survival p-value vs. Lambda p-value', xlab='lambda p-values', ylab='survival p-values')
-  abline(0,1)
+  ##P-value plots: extracting the p-values from the output list
+  pvalues<-as.data.frame(output[1:3], header=TRUE)
+  pvalues$diff<-cbind(pvalues$lambda_pv-pvalues$survival_pv)
   
-  hist(output$lambda_pv-output$survival_pv, main='Difference of lambda_pv minus survival_pv at beta=0.01')
-  hist(output$lambda_pv, main='Histogram of lambda p-values')
-  hist(output$survival_pv, main='Histogram of survival p-values')
+  #scatterplot
+  pv_plot<-qplot(unlist(lambda_pv), unlist(survival_pv), data=pvalues, size=3)
+  pv_plot<-pv_plot+geom_abline()+scale_size_identity(guide="none")+theme_bw()+xlab("Lambda p-values")+ylab("Survival p-values")+ggtitle("Survival vs Lambda p-values")
+  
+  #histograms
+  lambda_hist<- ggplot(pvalues, aes(x=lambda_pv)) + geom_histogram(binwidth=0.1, colour="black", fill="white") + 
+    ggtitle("Lambda p-value distribution") + xlab("Lambda p-values")
+  
+  survival_hist<-ggplot(pvalues, aes(x=survival_pv)) + geom_histogram(binwidth=0.1, colour="black", fill="white") + 
+    ggtitle("Survival p-value distribution") + xlab("Survival p-values")
+  
+  diff_hist<-ggplot(pvalues, aes(x=diff)) + geom_histogram(binwidth=0.1, colour="black", fill="white") + 
+    ggtitle("Lambda p-value minus Survival p-value distribution at beta = 0.01") + xlab("Difference")
+  
+  
+  
+  ##Plotting the proportional counts vs alpha
+  prop_pv<-melt(as.data.frame(output[4:6], header=TRUE))
+  alpha<-rep(alpha, 3)
+  prop_pv<-cbind(prop_pv, alpha)
+  
+  prop_plot<-ggplot(data=prop_pv, aes(y=value, x=alpha)) +geom_line(aes(colour=variable))+
+    ggtitle(paste(output$names, collapse="  "))+xlab("Alpha")+ylab("Frequency p-value is less than alpha")
+  
+  plots<-grid.arrange(pv_plot, lambda_hist, survival_hist, diff_hist, prop_plot, ncol=1)
+  
+  return(plots)
+
 }
 
 
