@@ -16,11 +16,15 @@ plot_pv<-function(output, alpha){
   
   ##P-value plots: extracting the p-values from the output list
   pvalues<-as.data.frame(output[1:3], header=TRUE)
+  #for now, remove abundance
+  pvalues<-pvalues[,-2]
   pvalues$diff<-cbind(pvalues$lambda_pv-pvalues$survival_pv)
   
+  
   #scatterplot
-  pv_plot<-qplot(unlist(lambda_pv), unlist(survival_pv), data=pvalues, size=3)
-  pv_plot<-pv_plot+geom_abline()+scale_size_identity(guide="none")+theme_bw()+xlab("Lambda p-values")+ylab("Survival p-values")+ggtitle("Survival vs Lambda p-values")
+  pv_plot<-qplot(unlist(lambda_pv), unlist(survival_pv), data=pvalues, size=1)
+  pv_plot<-pv_plot+geom_abline()+scale_size_identity(guide="none")+theme_bw()+xlab("Lambda p-values")+
+    ylab("Survival p-values")+ggtitle(paste(output$names, collapse="  "))
   
   #histograms
   lambda_hist<- ggplot(pvalues, aes(x=lambda_pv)) + geom_histogram(binwidth=0.1, colour="black", fill="white") + 
