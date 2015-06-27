@@ -42,7 +42,7 @@ for (k in 1:num_pops) {
 save(output, file="Pop_dem_Output_data.Rdata")
 
 ##plotting for a single species:
-plots<-plot_pv(output[[1]], alpha)
+#plots<-plot_pv(output[[1]], alpha)
 
 #plotting for multiple species:
 #first create a vector of names
@@ -52,21 +52,20 @@ for(i in 1:length(names)){
 }
 
 #plot to pdf of individual files each
-for (k in 1:num_pops){
-
-  pdf(paste("plot", names[k], ".pdf", sep=" "), height=20)
-  plots[[k]]<-plot_pv(output=output[[k]], alpha)
-  dev.off()
-}
+#for (k in 1:num_pops){
+#
+#  pdf(paste("plot", names[k], ".pdf", sep=" "), height=20)
+#  plots[[k]]<-plot_pv(output=output[[k]], alpha)
+#  dev.off()
+#}
 
 
 #plot into single pdf:
+plots<-list(NULL)
+
 pdf(paste("allplots.pdf"), height=20)
-
 for (k in 1:num_pops){
-  
   plots[[k]]<-plot_pv(output=output[[k]], alpha)
-
 }
 
 dev.off()
