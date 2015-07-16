@@ -14,6 +14,12 @@ surv_regr<- function(surv_trend, active_stages, abundance){
   survival <- survival[test_zeros != 0,]
   #print(survival)
   
+  for (i in 1:length(test_zeros)){
+    if(test_zeros[i]==0){
+      abundance<-abundance[,-i]
+    }
+  }
+  
   library(reshape2)
   survival<-melt(survival, varnames=c("stage", "year"))
   abundance<-melt(abundance[-1,], varnames=c("year", "stage"))
