@@ -17,7 +17,7 @@ plot_pv<-function(output, alpha){
   ##P-value plots: extracting the p-values from the output list
   pvalues<-as.data.frame(output[1:3], header=TRUE)
   #for now, remove abundance
-  pvalues<-pvalues[,-2]
+  #pvalues<-pvalues[,-2]
   pvalues$diff<-cbind(pvalues$lambda_pv-pvalues$survival_pv)
   
   
@@ -42,9 +42,9 @@ plot_pv<-function(output, alpha){
   #prop_pv<-melt(as.data.frame(output[4:6], header=TRUE))
   #leaving out abundance for now
   prop_pv<-as.data.frame(output[4:6], header=TRUE)
-  prop_pv<-prop_pv[,-2]
+  #prop_pv<-prop_pv[,-2]
+  alpha<-rep(alpha, dim(prop_pv)[2])
   prop_pv<-melt(prop_pv)
-  alpha<-rep(alpha, 2)
   prop_pv<-cbind(prop_pv, alpha)
   
   prop_plot<-ggplot(data=prop_pv, aes(y=value, x=alpha)) +geom_line(aes(colour=variable))+
