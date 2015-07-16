@@ -1,6 +1,6 @@
 #'extract_mat
 #'
-#'Extracts survival matrices from  
+#'Extracts survival matrices from the COMPADRE matrix data.
 #'
 #'@param MatrixData matrix population data from the COMPADRE matrix data
 #'
@@ -14,13 +14,13 @@ extract_mat<- function(MatrixData){
   for (i in 1:dim(MatrixData)){
     surv_mat[,,i]<-MatrixData[[i]]$matU
   }
-  ##pulling out LoBr reproduction
+  ##extracting fertility matrices
   fert_mat<-array(1, dim=c(dim(MatrixData[[1]]$matF)[1], dim(MatrixData[[1]]$matF)[2], dim(MatrixData)))
   for (i in 1:dim(MatrixData)){
     fert_mat[,,i]<-MatrixData[[i]]$matF
   }
   
-  ##pulling out LoBr transition matrices
+  ##extracting transition matrices
   trans_mat<-array(1, dim=c(dim(MatrixData[[1]]$matA)[1], dim(MatrixData[[1]]$matA)[2], dim(MatrixData)))
   for (i in 1:dim(MatrixData)){
     trans_mat[,,i]<-MatrixData[[i]]$matA
