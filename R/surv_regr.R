@@ -8,7 +8,7 @@
 #'@author Elizabeth Hiroyasu
 #'
 
-surv_regr<- function(surv_trend, active_stages){
+surv_regr<- function(surv_trend, active_stages, abundance){
   survival<- apply(surv_trend[,active_stages,], c(2,3), sum)
   test_zeros <- apply(survival, 1, sum)
   survival <- survival[test_zeros != 0,]
@@ -16,8 +16,10 @@ surv_regr<- function(surv_trend, active_stages){
   
   library(reshape2)
   survival<-melt(survival, varnames=c("stage", "year"))
-
-  lm_surv<- summary(lm(survival$value~survival$year+survival$stage))
+  abundance<-melt(abundance[-1,], varnames=c("year", "stage"))
+  merge<-merge(survival, abundance, by=c("stage", "year"))
+  colnames(merge)<-c("stage", "year", "survival", "abundance")
+  lm_surv<- summary(lm(merge$survival~merge$year+merge$stage, weights=merge$abundance))
   
   return(lm_surv)
 }
