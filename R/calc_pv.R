@@ -36,7 +36,7 @@ calc_pv<-function(surv_mat, fert_mat, trans_mat, N0_data, nstage, years, stage2m
   }
   
   ##survival regression
-  lm_surv<- surv_regr(surv_trend, active_stages)
+  lm_surv<- surv_regr(surv_trend, active_stages, abundance)
   pv_surv<-(lm_surv$coefficients[2,4])
   
 
