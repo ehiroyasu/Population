@@ -51,7 +51,7 @@ for (k in 1:num_pops) {
   
   # (surv_mat, fert_mat, trans_mat, N0_data, nstage, years, stage2mod, beta, active_stages, verbose=FALSE)
   #Analysis
-  output[[k]]<-list(analyze_pv(alpha, return_pv))
+  output[[k]]<-analyze_pv(alpha, return_pv)
   output[[k]]<-c(output[[k]], names=list(pop_list[k,]), eigenvalues=eigenvalues)
   }
   }
@@ -71,7 +71,7 @@ for(i in 1:length(names)){
 }
 
 #plot to pdf of individual files each
-# for (k in 1:num_pops){
+#  for (k in 1:num_pops){
 # 
 #  pdf(paste("plot", names[k], ".pdf", sep=" "), height=20)
 #  plots[[k]]<-plot_pv(output=output[[k]], alpha)
@@ -83,7 +83,7 @@ for(i in 1:length(names)){
 plots<-list(NULL)
 
 pdf(paste("allplots.pdf"), height=20)
-for (k in 212:num_pops){
+for (k in 1:num_pops){
   print(k)
   if ( !is.null(output[[k]]) ) {
     plots[[k]]<-plot_pv(output=output[[k]], alpha)
