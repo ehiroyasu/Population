@@ -22,7 +22,7 @@ plot_pv<-function(output, alpha){
   
   
   #scatterplot
-  pv_plot<-qplot(unlist(lambda_pv), unlist(survival_pv), data=pvalues, size=1)
+  pv_plot<-qplot(unlist(lambda_pv), unlist(survival_pv), data=pvalues[1:100,], size=1)
   pv_plot<-pv_plot+geom_abline()+scale_size_identity(guide="none")+theme_bw()+xlab("Lambda p-values")+
     ylab("Survival p-values")+ggtitle(paste(output$names, collapse="  "))
   
