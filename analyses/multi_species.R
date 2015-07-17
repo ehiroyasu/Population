@@ -9,9 +9,9 @@ num_pops <- dim(pop_list)[1]
 delta=0.001
 alpha=seq(from=0.01, to=0.2, by=delta)
 
-#output <- list(NULL)
+output <- list(NULL)
 
-for (k in 212:num_pops) {
+for (k in 1:num_pops) {
   print(k)
   temp1<-subset(mydata$metadata, SpeciesAuthor==pop_list[k,1] & Population==pop_list[k,2])
   
@@ -40,16 +40,19 @@ for (k in 212:num_pops) {
   if (mean(fert_mat) > 0 & k != 68 & k != 212 & dim(trans_mat)[3] >= 5 & max(temp1$SurvivalIssue) <= 1) {
   #calculating the number of stages in the matrix:
   nstage<-1:dim(surv_mat)[1]
- 
+  
+  #calculating the mean transition matrices and eigenvalues
+  mean_trans_mat<-apply(trans_mat, c(1,2), mean)
+  eigenvalues<-eigen(mean_trans_mat)
+  dom_eigenvalue<-eigenvalues$values[1]
   
   #Running simulations
-  return_pv<-replicate(100, calc_pv(surv_mat, fert_mat, trans_mat, #fert_zero, 
-                                    N0_data, nstage=nstage, years=1:10, stage2mod=active_stages, beta=0.01, active_stages = active_stages, verbose=FALSE))
+  return_pv<-replicate(10000, calc_pv(surv_mat, fert_mat, trans_mat, N0_data, nstage=nstage, years=1:10, stage2mod=active_stages, beta=0.01, active_stages = active_stages, verbose=FALSE))
   
   # (surv_mat, fert_mat, trans_mat, N0_data, nstage, years, stage2mod, beta, active_stages, verbose=FALSE)
   #Analysis
-  output[[k]]<-analyze_pv(alpha, return_pv)
-  output[[k]]<-c(output[[k]], names=list(pop_list[k,]))
+  output[[k]]<-list(analyze_pv(alpha, return_pv))
+  output[[k]]<-c(output[[k]], names=list(pop_list[k,]), eigenvalues=eigenvalues)
   }
   }
   
@@ -80,7 +83,7 @@ for(i in 1:length(names)){
 plots<-list(NULL)
 
 pdf(paste("allplots.pdf"), height=20)
-for (k in 1:num_pops){
+for (k in 212:num_pops){
   print(k)
   if ( !is.null(output[[k]]) ) {
     plots[[k]]<-plot_pv(output=output[[k]], alpha)
