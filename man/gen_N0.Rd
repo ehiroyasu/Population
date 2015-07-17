@@ -4,7 +4,7 @@
 \alias{gen_N0}
 \title{Generate a matrix of N0 vectors to use in demographic trend simulations.}
 \usage{
-gen_N0(trans_mat, n_return = 1, n_converge = 20)
+gen_N0(trans_mat, n_return = 1, n_converge = 100)
 }
 \arguments{
 \item{trans_mat}{an array of transition matrices}

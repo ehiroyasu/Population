@@ -4,7 +4,7 @@
 \alias{surv_regr}
 \title{surv_regression}
 \usage{
-surv_regr(surv_trend, active_stages)
+surv_regr(surv_trend, active_stages, abundance)
 }
 \arguments{
 \item{surv_trend}{array of survival matrices with inserted trend beta}

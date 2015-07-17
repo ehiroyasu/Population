@@ -16,7 +16,20 @@ k <- kk[pop_list[,1]=="Arenaria_bolosii" & pop_list[,2]=="Puig de Massanella"]
 k <- kk[pop_list[,1]=="Adenocarpus_gibbsianus" & pop_list[,2]=="Palos de la Frontera"]
 
 # Adenocarpus_gibbsianus Palos de la Frontera: Much better N p values
-k <- kk[pop_list[,1]=="Adenocarpus_gibbsianus" & pop_list[,2]=="Donana"]
+#k <- kk[pop_list[,1]=="Adenocarpus_gibbsianus" & pop_list[,2]=="Donana"]
+
+# Cheirolophus_metlesicsii Barranco de Anavingo: Demog is by far the worst
+k <- kk[pop_list[,1]=="Cheirolophus_metlesicsii" & pop_list[,2]=="Barranco de Anavingo"]
+
+# Erodium_paularense Cañamares I - has survival > 1
+k <- kk[pop_list[,1]=="Erodium_paularense" & pop_list[,2]=="Cañamares I"]
+
+# Petrocoptis_pseudoviscosa_2 Abi
+
+k <- 68
+k <- 92
+k <- 105
+k <- 212
 
 ### Extract the matrices
 temp1<-subset(mydata$metadata, SpeciesAuthor==pop_list[k,1] & Population==pop_list[k,2])
@@ -32,6 +45,12 @@ temp<- extract_mat(MatrixData)
 surv_mat<-temp$"survival matrices"
 fert_mat<-temp$"fertility matrices"
 trans_mat<-temp$"transition matrices"
+
+all_zero <- apply(trans_mat, 3, mean) == 0
+surv_mat <- surv_mat[,,!all_zero]
+fert_mat <- fert_mat[,,!all_zero]
+trans_mat <- trans_mat[,,!all_zero]
+
 #calculating the number of stages in the matrix:
 nstage<-1:dim(surv_mat)[1]
 

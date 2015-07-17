@@ -40,6 +40,7 @@ insert_survival_trend<- function(surv_rand, beta, nstage, stage2mod, years, verb
   surv_na<- (sum(surv_trend[,stage2mod,]=="NaN" & surv_trend[,stage2mod,]=="Inf"))
   
   surv_trend[is.na(surv_trend)]<-0
+  surv_trend[is.nan(surv_trend)]<-0
   surv_trend[surv_trend<0]<-0
   surv_trend[is.infinite(surv_trend)]<-0
   

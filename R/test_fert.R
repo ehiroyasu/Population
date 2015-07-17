@@ -22,4 +22,4 @@ test_fert<-function(fert_mat){
 
 
 
-apply(fert_mat, 3, which)
+#apply(fert_mat, 3, which)
