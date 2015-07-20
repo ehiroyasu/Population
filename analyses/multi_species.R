@@ -5,12 +5,12 @@ mydata <- Load_Compadre_Data(CompadreFile)
 
 pop_list <- unique(cbind(mydata$metadata$SpeciesAuthor,mydata$metadata$Population))
 num_pops <- dim(pop_list)[1]
-#num_pops <- 2 # for debugging
+#num_pops <- 50 # for debugging
 delta=0.001
 alpha=seq(from=0.01, to=0.2, by=delta)
 
 output <- list(NULL)
-
+output_alpha.1 <- list(NULL)
 for (k in 1:num_pops) {
   print(k)
   temp1<-subset(mydata$metadata, SpeciesAuthor==pop_list[k,1] & Population==pop_list[k,2])
@@ -53,12 +53,34 @@ for (k in 1:num_pops) {
   #Analysis
   output[[k]]<-analyze_pv(alpha, return_pv)
   output[[k]]<-c(output[[k]], names=list(pop_list[k,]), eigenvalues=eigenvalues)
+
+
   }
   }
   
 }
 
 save(output, file="Pop_dem_Output_data.Rdata")
+
+
+##to examine for a specific alpha value
+prop_demog_0.1<-matrix(data=NA)
+prop_N_0.1<-matrix(data=NA)
+prop_lambda_0.1<-matrix(data=NA)
+names0.1<-matrix(data=NA)
+for (i in 1:length(output)){
+  prop_demog_0.1[i]<-as.numeric(pv_lessthan_alpha(pvalue=output[[i]]$survival_pv, alpha=0.1))
+  prop_N_0.1[i]<-as.numeric(pv_lessthan_alpha(pvalue=output[[i]]$abundance_pv, alpha=0.1))
+  prop_lambda_0.1[i]<-as.numeric(pv_lessthan_alpha(pvalue=output[[i]]$lambda_pv, alpha=0.1))
+  names0.1[i]<-paste(output[[i]]$names, collapse="  ")
+  prop_0.1<-data.frame(prop_demog_0.1, prop_N_0.1, prop_lambda_0.1, names0.1)
+  prop_0.1<-prop_0.1[complete.cases(prop_0.1), ]
+}
+
+#scatterplot for all species at a specific alpha value
+alpha0.1_plot<-qplot(prop_lambda_0.1, prop_demog_0.1, data=prop_0.1, size=3, color=names0.1)
+alpha0.1_plot<-alpha0.1_plot+geom_abline()+scale_size_identity(guide="none")+theme_bw()+xlab("Lambda Power")+
+  ylab("Survival Power")+ggtitle("Power of Lambda vs Power of Survival for all Species")+theme(legend.position="none")
 
 ##plotting for a single species:
 #plots<-plot_pv(output[[1]], alpha)
