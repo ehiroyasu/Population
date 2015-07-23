@@ -22,7 +22,7 @@ calc_pv<-function(surv_mat, fert_mat, trans_mat, N0_data, nstage, years, stage2m
 
 
   ##inserting a trend into survival
-  temp <- insert_survival_trend(surv_rand, beta, nstage, stage2mod, years), verbose)
+  temp <- insert_survival_trend(surv_rand, beta, nstage, stage2mod, years, verbose)
   surv_trend <- temp[[1]]
   ##to print the number of times the survival goes to zero in the stages where a trend has been inserted
   surv_zero <- temp[[2]]

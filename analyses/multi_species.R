@@ -62,6 +62,17 @@ for (k in 1:num_pops) {
 
 save(output, file="Pop_dem_Output_data.Rdata")
 
+##Examining eigenvectors
+
+eigenvectors<-list()
+for (i in 1:length(output)){
+  eigenvectors[[i]]<-output[[i]]$eigenvalues.vectors
+}
+
+eigenvectors=eigenvectors[!sapply(eigenvectors, is.null)]
+complex_eigenvectors<-lapply(eigenvectors, is.complex)
+which(complex_eigenvectors==FALSE)
+
 
 ##to examine for a specific alpha value
 prop_demog_0.1<-matrix(data=NA)
