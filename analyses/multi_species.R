@@ -63,7 +63,6 @@ for (k in 1:num_pops) {
 save(output, file="Pop_dem_Output_data.Rdata")
 
 ##Examining eigenvectors
-
 eigenvectors<-list()
 for (i in 1:length(output)){
   eigenvectors[[i]]<-output[[i]]$eigenvalues.vectors
@@ -73,6 +72,16 @@ eigenvectors=eigenvectors[!sapply(eigenvectors, is.null)]
 complex_eigenvectors<-lapply(eigenvectors, is.complex)
 which(complex_eigenvectors==FALSE)
 
+#examining dominant eigenvalues
+dom_eigenvalue<-list()
+species_names<-as.vector(NULL)
+for (i in 1:length(output)){
+  dom_eigenvalue[[i]]<- output[[i]]$eigenvalues.values[1] 
+  species_names[i]<-paste(output[[i]]$names, collapse="  ")
+}
+species_names<-species_names[species_names!= ""]
+dom_eigenvalue<-as.vector(as.numeric(unlist(dom_eigenvalue)))
+dom_eigenvalue<-data.frame(dom_eigenvalue, species_names)
 
 ##to examine for a specific alpha value
 prop_demog_0.1<-matrix(data=NA)
@@ -98,10 +107,10 @@ alpha0.1_plot<-alpha0.1_plot+geom_abline()+scale_size_identity(guide="none")+the
 
 #plotting for multiple species:
 #first create a vector of names
-names<-vector(length=length(pop_list[,1]))
-for(i in 1:length(names)){
-  names[i]<-paste(pop_list[i,], collapse="  ")
-}
+# names<-vector(length=length(pop_list[,1]))
+# for(i in 1:length(names)){
+#   names[i]<-paste(pop_list[i,], collapse="  ")
+# }
 
 #plot to pdf of individual files each
 #  for (k in 1:num_pops){
