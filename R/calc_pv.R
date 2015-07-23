@@ -49,6 +49,8 @@ calc_pv<-function(surv_mat, fert_mat, trans_mat, N0_data, nstage, years, stage2m
   Nt <- apply(N_active, 1, sum)
   lambda<- Nt[-1]/Nt[-length(Nt)]
     lambda[is.na(lambda)]<-0
+    
+  mean_lambda<-mean(lambda)
   
     if(verbose) {
       plot(lambda)
@@ -67,5 +69,5 @@ calc_pv<-function(surv_mat, fert_mat, trans_mat, N0_data, nstage, years, stage2m
   
   return(list("survival p-value"=pv_surv, "abundance p-value"=pv_abundance, "lambda p-value" = pv_lambda, 
               "n surv=0"=surv_zero, "n surv=na"=surv_na, "survival variance"=surv_var, "abundance variance" = abundance_var, 
-              "lambda variance"=lambda_var))
+              "lambda variance"=lambda_var, "mean_lambda"=mean_lambda))
 }
