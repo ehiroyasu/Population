@@ -18,7 +18,7 @@ autocorrelation_test<-function(mod){
   autocorrelation_plot<-acf(res)
   n=length(res)
   lm_res<- lm(res[-n]~res[-1])
-  res_plot<-plot(abundance_res[-n]~abundance_res[-1])
+  res_plot<-plot(res[-n]~res[-1])
   
   return(list(res, autocorrelation_plot, lm_res, res_plot))
   
