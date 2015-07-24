@@ -5,12 +5,12 @@ mydata <- Load_Compadre_Data(CompadreFile)
 
 pop_list <- unique(cbind(mydata$metadata$SpeciesAuthor,mydata$metadata$Population))
 num_pops <- dim(pop_list)[1]
-#num_pops <- 50 # for debugging
+#num_pops <- 5 # for debugging
 delta=0.001
 alpha=seq(from=0.01, to=0.2, by=delta)
 
 output <- list(NULL)
-output_alpha.1 <- list(NULL)
+
 for (k in 1:num_pops) {
   print(k)
   temp1<-subset(mydata$metadata, SpeciesAuthor==pop_list[k,1] & Population==pop_list[k,2])
@@ -44,16 +44,14 @@ for (k in 1:num_pops) {
   #calculating the mean transition matrices and eigenvalues
   mean_trans_mat<-apply(trans_mat, c(1,2), mean)
   eigenvalues<-eigen(mean_trans_mat)
-  dom_eigenvalue<-eigenvalues$values[1]
-  
+
   #Running simulations
   return_pv<-replicate(10000, calc_pv(surv_mat, fert_mat, trans_mat, N0_data, nstage=nstage, years=1:10, stage2mod=active_stages, beta=0.01, active_stages = active_stages, verbose=FALSE))
-  
+
   # (surv_mat, fert_mat, trans_mat, N0_data, nstage, years, stage2mod, beta, active_stages, verbose=FALSE)
   #Analysis
   output[[k]]<-analyze_pv(alpha, return_pv)
   output[[k]]<-c(output[[k]], names=list(pop_list[k,]), eigenvalues=eigenvalues)
-
 
   }
   }
