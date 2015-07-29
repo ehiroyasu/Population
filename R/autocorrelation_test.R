@@ -15,11 +15,11 @@
 autocorrelation_test<-function(mod){
 
   res<-mod$residuals
-  autocorrelation_plot<-acf(res)
+  autocorrelation_plot<-acf(res, plot = FALSE)
   n=length(res)
   lm_res<- lm(res[-n]~res[-1])
-  res_plot<-plot(res[-n]~res[-1])
+#  res_plot<-plot(res[-n]~res[-1])
   
-  return(list(res, autocorrelation_plot, lm_res, res_plot))
+  return(list(res, autocorrelation_plot, lm_res)) #, res_plot))
   
 }
