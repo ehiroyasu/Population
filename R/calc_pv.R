@@ -38,16 +38,24 @@ calc_pv<-function(surv_mat, fert_mat, trans_mat, N0_data, nstage, years, stage2m
   
   ##survival regression
   lm_surv<- surv_regr(surv_trend, active_stages, abundance)
-  pv_surv<-(lm_surv$coefficients[2,4])
-  
+  pv_surv<-(lm_surv$coefficients[2,4])/2
+  if (lm_surv$coefficients[2,1] > 0) {
+    pv_surv <- 1-pv_surv
+  }
 
   ##abundance regression
   lm_abundance<- abundance_regr(abundance[-1,], years, active_stages)
-  pv_abundance<- (lm_abundance$coefficients[3,4])
+  pv_abundance<- (lm_abundance$coefficients[3,4])/2
+  if (lm_abundance$coefficients[3,1] > 0) {
+    pv_abundance <- 1- pv_abundance
+  }
   
   ##log abundance regression
   lm_log_abundance<-log_abundance_regr(abundance[-1,], years, active_stages)
-  pv_log_abundance<-(lm_log_abundance$coefficients[3,4])
+  pv_log_abundance<-(lm_log_abundance$coefficients[3,4])/2
+  if (lm_log_abundance$coefficients[3,1] > 0) {
+    pv_log_abundance <- 1- pv_log_abundance
+  }
   
   #calculating lambda:
   N_active <- abundance[,active_stages]
@@ -64,7 +72,10 @@ calc_pv<-function(surv_mat, fert_mat, trans_mat, N0_data, nstage, years, stage2m
   
   ##lambda regression:
   lm_lambda<-lambda_regr(lambda, years)
-  pv_lambda<-(lm_lambda$coefficients[2,4])
+  pv_lambda<-(lm_lambda$coefficients[2,4])/2
+  if (lm_lambda$coefficients[2,1] > 0) {
+    pv_lambda <- 1-pv_lambda
+  }
   
   #calculating variances
   surv_var<-var(resid(lm_surv))
