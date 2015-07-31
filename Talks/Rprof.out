@@ -1,0 +1,7 @@
+sample.interval=20000
+"rbind" "rbind" "do.call" "merge.data.frame" "merge" "surv_regr" "calc_pv" "FUN" "lapply" "sapply" "replicate" 
+"summary.lm" "summary" "lambda_regr" "calc_pv" "FUN" "lapply" "sapply" "replicate" 
+"any" "apply" "surv_regr" "calc_pv" "FUN" "lapply" "sapply" "replicate" 
+"names" "[.data.frame" "[" "na.omit.data.frame" "na.omit" ".External2" "model.frame.default" "<Anonymous>" "eval" "eval" "lm" "summary" "log_abundance_regr" "calc_pv" "FUN" "lapply" "sapply" "replicate" 
+"sort.list" "eigen" "stable.stage" "gen_N0" "calc_abundance" "calc_pv" "FUN" "lapply" "sapply" "replicate" 
+"summary.lm" "summary" "lambda_regr" "calc_pv" "FUN" "lapply" "sapply" "replicate" 
