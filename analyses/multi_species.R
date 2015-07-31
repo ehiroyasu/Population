@@ -46,7 +46,7 @@ for (k in 1:num_pops) {
   eigenvalues<-eigen(mean_trans_mat)
 
   #Running simulations
-  return_pv<-replicate(10000, calc_pv(surv_mat, fert_mat, trans_mat, N0_data, nstage=nstage, years=1:10, stage2mod=active_stages, beta=0.01, active_stages = active_stages, verbose=FALSE))
+  return_pv<-replicate(10000, calc_pv(surv_mat, fert_mat, trans_mat, N0_data, nstage=nstage, years=1:10, stage2mod=active_stages, beta=0.0, active_stages = active_stages, verbose=FALSE))
 
   # (surv_mat, fert_mat, trans_mat, N0_data, nstage, years, stage2mod, beta, active_stages, verbose=FALSE)
   #Analysis
@@ -58,7 +58,7 @@ for (k in 1:num_pops) {
   
 }
 
-save(output, file="Pop_dem_Output_data.Rdata")
+save(output, file="Pop_dem_Output_data_notrend.Rdata")
 
 ##Examining eigenvectors
 eigenvectors<-list()
@@ -122,7 +122,7 @@ alpha0.1_plot<-alpha0.1_plot+geom_abline()+scale_size_identity(guide="none")+the
 #plot into single pdf:
 plots<-list(NULL)
 
-pdf(paste("allplots.pdf"), height=20)
+pdf(paste("allplots_notrend.pdf"), height=20)
 for (k in 1:num_pops){
   print(k)
   if ( !is.null(output[[k]]) ) {

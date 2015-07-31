@@ -26,6 +26,10 @@ k <- kk[pop_list[,1]=="Erodium_paularense" & pop_list[,2]=="Cañamares I"]
 
 # Petrocoptis_pseudoviscosa_2 Abi
 
+k <- kk[pop_list[,1]=="Adenocarpus_gibbsianus" & pop_list[,2]=="Hinojos"]
+
+k <- kk[pop_list[,1]=="Haplopappus_radiatus" & pop_list[,2]=="2in"]
+
 k <- 68
 k <- 92
 k <- 105
@@ -39,6 +43,7 @@ MatrixData<- as.array(mydata$mat[mydata$metadata$SpeciesAuthor==pop_list[k,1] & 
 MatClass<-mydata$mat_class[save]
 
 active_stages<-subset(MatClass[[1]]$MatrixClassNumber, MatClass[[1]]$MatrixClassOrganized=='active')
+active_stages<-subset(MatClass[[1]]$MatrixClassNumber, MatClass[[1]]$MatrixClassOrganized=='active' & MatClass[[1]]$MatrixClassAuthor != "Seedling")
 
 #extracting matrices:
 temp<- extract_mat(MatrixData)
@@ -62,8 +67,11 @@ temp1
 active_stages
 MatClass
 
-calc_pv(surv_mat, fert_mat, trans_mat, N0_data, nstage, years=1:10, stage2mod=active_stages, beta=0.01, active_stages = active_stages,verbose = TRUE)
+calc_pv(surv_mat, fert_mat, trans_mat, N0_data, nstage, years=1:10, stage2mod=active_stages, beta=0.0, active_stages = active_stages,verbose = TRUE)
 
+out_temp0<- replicate(1000,calc_pv(surv_mat, fert_mat, trans_mat, N0_data, nstage, years=1:10, stage2mod=active_stages, beta=0.0, active_stages = active_stages,verbose = FALSE))
+out_temp0 <- analyze_pv(alpha, out_temp0)
+hist(out_temp0$survival_pv)
 #### Run the analysis
 
 
