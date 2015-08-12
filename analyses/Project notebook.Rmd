@@ -1,0 +1,111 @@
+---
+title: "Project Notebook"
+author: "Bruce Kendall"
+output: html_document
+---
+
+Compiled using `r R.Version()$version.string` on `r date()`.
+
+This is a place to record project history in more detail than can be done in the commit messages, as well as notes about what we have learned and what needs to be done. Please date entries and add new entries in reverse chronological order; within a day add new items at the bottom of the entry and tag with your initials.
+
+# 12 Aug. 2015
+
+**BK:**
+
+## ICCB talk
+Bruce's talk at ICCB (which is in "Talks/Demographic monitoring ICCB 2015 v03.pptx") was positively received. There weren't really any substantive suggestions, but lots of feedback like "That's what I've been trying to tell people, it's nice to have evidence!" So the paper should get lots of use if we can in fact get solid results.
+
+The one general question is what happens if the trend is in reproductive rates rather than (or in addition to) survival.
+
+Jonathan Levine also pointed out that the obvious thing to look at from an ecological perspective is to relate both demography and growth rate to conditions measured at the site. We will need to address this in the introduction (at remote sites, weather observations are harder than annual surveys).
+
+That makes me (BK) realize that we also need to discuss portential interactions with density dependence.
+
+## Latebreaking issues
+In the runup to the talk, Bruce uncovered a number of issues in the analysis so far, which leads us to be skeptical of the actual quantitative results.
+
+### False detection isssues
+Trying to understand some of the patterns in the trend analyses, Bruce did a quick and dirty run with *no* trend, to look at type I error rates. He found that, in quite a few of the populations, there was a higher-than-expected type-I error rates (i.e., more than 10% of the P-values were less than 0.1). The figures are in Analyses/allplots_notrend.pdf. In many cases the survival analysis was worse in this regard than was growth rate monitoring, so some of our power results may simply be false detection results. This bears careful examination, both for understanding the cause of the type-I errors and in figuring out if that is what drives our results.
+
+It might be that overly high false detection in survival regressions comes in populations where one of the annual survivals is low and the others are all uniformly high - if the low one comes at the beginning or end of the time series then it will have a strong influence on the regression slope. However, this would also show up as *positive* outocorrelation in the residuals.
+
+Both this and the underdetection we sometimes get in growth rate might be addressed by performing gls with an AR(1) model structure---this starts to get into the realm of "hard for field conservationists to do" but is less tricky than building a full-on demographic model!
+
+### Speed
+Bruce profiled the code, finding first that the ACF plots were time hogs; taking those out sped things up by a factor of almost 10. 
+
+Now most of the time is being spent in `summary.lm()`. A lot is done there that we don't need; it may be worth extracting the P-value calculations as a standalone function. It may actually be the P-value calculations that are slow, since there is a singular value decomposition to get the standard errors. If so, we may be able to get away with using a less-robust method.
+
+### COMPADRE issues
+Bruce now understands that there has been no quality control exerted over the selection of studies to include in the database, and in fact Rob Salguero-Gomez's philosophy is that any user should check the original sources of any matrices being used. This is unfortunate, and a quick check on a few references found issues such as:
+
+- The cited paper doesn't actually describe the matrices
+- The reproductive terms have (probably) been mis-specified, lacking the survival component (one source of evidence for this is a mandatory full year as a seed [i.e., no direct transition from adult this year to seedling next year], despite no mention of this in the species description)
+- The published matrices don't seem to match the data presented in the paper (e.g., for annual seed production)
+- Some stages have very small sample sizes for survival/growth
+
+This means, unfortunately, that once we've selected our populations (see below for more on this), we need to go look at the papers, applying some criteria for whether we believe the matrices as being valid descriptions of the populations. There are also some checks we can make on the matrices themselves, such as looking for obligatory seed stages and trying to infer the sample sizes in the U matrix (i.e., a column of (0.25, 0.5, 0.25) probably only has a sample size of 4). 
+
+This will result in some additional metadata for the species that pass the initial sample size test and the other tests currently in the analysis script, which we can use to further exclude studies.
+
+We can also modify some of the matrices: we can eliminate obligatory seed stages in some cases, and where we can find or infer sample sizes, we can test each stage's U and F entries for significant variation among years, replacing values with the mean when there is no strong evidence of variation.
+
+A new version of the database has just been released; we should use that, but first we need to look again at the studies that are currently being excluded by id number.
+
+### Very large sensitivities
+When Bruce was trying to understand the drivers of variation in the relative advantage of demographic monitoring, he looked at the sensitivity of lambda to survival in the mean matrix. The power of abundance monitoring was only high when the sensitivity was close to one, as might be expected, but most sensitivities were much larger than one. There is no reason mathematically why this cannot occur, but it doesn't seem to make sense biologically. This is something we need to better understand.
+
+## Conceptual changes
+
+### Switch to one-sided test
+Late in the game Bruce switched to looking at one-sided tests. The effect of this is that in cases with inflated or deflated type-I error rates the distribution of P values becomes approximately symmetric. It seems like the right thing to do if what we are showing is the abiity to detect worsening trends.
+
+### Early warning aspect
+Discussions with Jonathan Levine after Bruce's practice talk suggest that, when there is a nonlinear relationship between survival and population growth rate, demographic monitoring can provide an "early warning" of worsening conditions. I think this is a good idea, and it could be tested by looking at, for example, the number of years needed to acheive a given P value with each technique. This requires running a longer simulation (which could be problematic with low survival rates).
+
+### Clonal reproduction
+I don't know if any of the populations we have been using so far have clonal reproduction, but we need to make sure to include that in the transition matrices.
+
+### Data selection
+Given that we are doing 10,000 replicates, I think we may need to restrict ourselves to populations with 6 matrices (after dropping out the matrices with all zeros). Five matrices only allow `r prettyNum(5^5, big.mark=",")` possible sequences, whereas six matrices allow `r format(6^6, sci=FALSE, big.mark = ",")`.
+
+I also think that we want to extend to the other growth forms, so that we can examine the results across a broader span of life histories. Basically this would mean looking at everything with annual (non-seasonal) matrices. We can potentially even include models with only one active stage.
+
+### Which things to monitor
+For abundance monitoring, we know that trends in abosulute abundance are not reliable, as simple exponential growth or decline generate a positive second derivative (which will not longer show up as a low P-value under a one-sided test, but will mask the effects of a trend on a negative second derivative test). Trends in log abundance fix this problem, but the quantitative response should be more related to proportional changes in demography rather than aboslute changes in demography. Population growth rate $\lambda_t = N_{t+1}/N_t$) should, in the absense of stage structure fluctuations and large changes in survival, have a linear response to the demographic trend, although the response could be steeper or shallower depending on the sensitivities.
+
+For survival, it's no longer obvious to me that the way that we are doing it is "best." I think that if there is one stage that is highly variable, the current approach may be less powerful than if we simply looked at mean survival across the stages (weighted by stage abundance). This can be tested empirically.
+
+### Including seedlings
+Seedlings are generally classified as active stages. In the final throes of prepping for the talk Bruce took them out of the analysis, to try to reduce some of the effects of high variability on the trend. There are two issues to think about here: (1) Are seedlings likely to be affected similarly as older stages by changing environments? (2) Are seedlings likely to be counted by monitoring schemes? We may be able to argue that the answer is "no" to both: (1) Seedling survival is undoubtedly affected by climate, but probably by different factors than survival of established individuals. (2) If seedling survival is low (as it often is), then field biologists will recognize that they make little contribution to the population, and indeed are often harder to count than older individuals. Whether there is data to back either of these up is another question.
+
+### Setting the baseline survival
+Some of the strange results we are seeing may be do to truncation of the trend at zero survival. There are two things we can do about that. First, averaging of survivals based on very low sample sizes may reduce the number of true zero survivals. Second, we can pick a stage-specific baseline to eliminate or minimize the chance that a survival at the end of the dataset will be truncated at zero (e.g., by taking year-10 survival as is, adding beta to year 9, adding 2*beta to year 8, etc.). We can't do this uniformly, as that would lead year 1 survivals to be truncated at one sometimes; in cases with a wide range of survivals, we would need to pick a baseline year around the midpoint of the time series.
+
+## Things to do
+
+Coding:
+
+- Test out alternatives to `summary.lm()`
+- Write a generic function for returning the P-value of a specified coefficient from any lm object
+- Revise trend insertion to minimize trend truncation
+- Include clonal reproduction in the transition matrices
+- Modify plotting routines to allow control over which outputs to plot
+
+Conceptual stuff:
+
+- Investigate different ways of recording survival
+- Understand drivers of inaccurate type I error
+- Understand sensitivities
+- Implement early warning analysis
+
+Data issues:
+
+- Indentify the populations we are manually excluding and provide new criteria
+- Install the new version of the database
+- See how many populations meet the 6-year criterion
+- Write scripts for internal data quality evaluations
+- Check literature sources
+
+
+
