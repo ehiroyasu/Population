@@ -57,7 +57,7 @@ summary(lm(survival~year, data=df))
 # Panels for histograms
 
 load("../Pop_dem_Output_data.Rdata")
-
+library(ggplot2)
 data1 <- output[[1]]
 
 random <- data.frame(x=runif(10000))
@@ -65,7 +65,7 @@ lambda_pv <- data.frame(x=data1$lambda_pv)
 surv_pv <- data.frame(x=data1$survival_pv)
 
 h0 <- ggplot(random, aes(x=x)) + geom_histogram(aes(y=..count../sum(..count..)), fill="brown", binwidth=0.05, colour="black", linetype="dotted") + theme_classic(base_size = 24) +  ylab("FREQENCY") + xlab("P-VALUE") + geom_abline(intercept=0.05, slope=0, linetype="dashed") + ylim(0,0.06)
-h1 <- ggplot(surv_pv, aes(x=x)) + ggtitle("Demographic Monitoring") + geom_histogram(aes(y=..count../sum(..count..)), fill="brown", binwidth=0.05, colour="black", linetype="dotted") + theme_classic(base_size = 24) +  ylab("FREQENCY") + xlab("P-VALUE") + ylim(0,0.475) + geom_abline(intercept=0.05, slope=0, linetype="dashed")
+h1 <- ggplot(surv_pv, aes(x=x)) + ggtitle("Vital Rate Monitoring") + geom_histogram(aes(y=..count../sum(..count..)), fill="brown", binwidth=0.05, colour="black", linetype="dotted") + theme_classic(base_size = 24) +  ylab("FREQENCY") + xlab("P-VALUE") + ylim(0,0.475) + geom_abline(intercept=0.05, slope=0, linetype="dashed")
 h2 <- ggplot(lambda_pv, aes(x=x)) + ggtitle("Abundance Monitoring") + geom_histogram(aes(y=..count../sum(..count..)), fill="brown", binwidth=0.05, colour="black", linetype="dotted")+ theme_classic(base_size = 24) +  ylab("FREQENCY") + xlab("P-VALUE") + geom_abline(intercept=0.05, slope=0, linetype="dashed")
 
 ggsave("h0.png", h0, width=7,height=7)
@@ -75,6 +75,7 @@ ggsave("h2.png", h2, width=7,height=7)
 
 
 #scatterplot for all species at a specific alpha value
+library(DemographicTrend)
 prop_demog_0.1<-matrix(data=NA)
 prop_N_0.1<-matrix(data=NA)
 prop_lambda_0.1<-matrix(data=NA)
@@ -89,11 +90,11 @@ for (i in 1:length(output)){
 }
 
 
-alpha0.1_plot<-qplot(prop_lambda_0.1, prop_demog_0.1, data=prop_0.1, size=3, color="brown")
+alpha0.1_plot<-qplot(prop_lambda_0.1, prop_demog_0.1, data=prop_0.1, size=3, colour="brown")
 alpha0.1_plot<-alpha0.1_plot+geom_abline()+scale_size_identity(guide="none")+theme_classic(base_size = 24)+xlab("ABUNDANCE MONITORING")+
-  ylab("DEMOGRAPHIC MONITORING")+theme(legend.position="none") + ggtitle("Power to detect trends")+xlim(0,1)+ylim(0,1)
-print(alpha0.1_plot)
-ggsave("powerblank.png", alpha0.1_plot, width=7,height=7)
+  ylab("VITAL RATE MONITORING")+theme(legend.position="none") + ggtitle("Power to detect trends")+xlim(0,1)+ylim(0,1)
+print(alpha0.1_plot+aes(size=0))
+ggsave("powerblank.png", alpha0.1_plot+aes(size=0), width=7,height=7)
 ggsave("power.png", alpha0.1_plot, width=7,height=7)
 
 
