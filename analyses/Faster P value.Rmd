@@ -1,0 +1,48 @@
+---
+title: "Faster P value"
+author: "Bruce Kendall"
+date: "August 20, 2015"
+output: html_document
+---
+
+Here we test a substitute to `summary.lm()` for calculating P values.
+
+Here is a function that is based on `summary.lm()` but only has the bits related to calculating the P values. Notice that it includes a Cholesky decomposition so may still be slow.
+```{r pval}
+Pval <- function(object) {
+  z <- object
+  p <- z$rank
+  rdf <- z$df.residual
+  r <- z$residuals
+  rss <- sum(r^2)
+  resvar <- rss/rdf
+  Qr <- qr(object)
+  p1 <- 1L:p
+  R <- chol2inv(Qr$qr[p1, p1, drop = FALSE])
+  se <- sqrt(diag(R) * resvar)
+  est <- z$coefficients[Qr$pivot[p1]]
+  tval <- est/se
+  pval <- 2 * pt(abs(tval), rdf, lower.tail = FALSE)
+  return(pval)
+}
+```
+Now we'll make a regression object, and ensure that the two functions give the same P-value:
+```{r lm}
+xx <- 1:10
+yy <- 3 + 1.5*xx + rnorm(10, sd=0.5)
+model.lm <- lm(yy~xx)
+summary(model.lm)$coef[,4]
+Pval(model.lm)
+```
+So now we'll test how long it takes to evaluate each of these a bunch of times
+```{r test}
+nits <- 10000
+f1 <- function(nits) {
+  system.time(for (i in 1:nits) pval <- summary(model.lm)$coef[2,4])
+}
+f2 <- function(nits) {
+  system.time(for (i in 1:nits) pval <- Pval(model.lm)[2])
+}
+f1(nits)
+f2(nits)
+```
