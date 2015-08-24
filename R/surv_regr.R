@@ -26,7 +26,7 @@ surv_regr<- function(surv_trend, active_stages, abundance){
   abundance<-melt(abundance[-1,active_stages], varnames=c("year", "stage"))
   merge<-merge(survival, abundance, by=c("stage", "year"))
   colnames(merge)<-c("stage", "year", "survival", "abundance")
-  lm_surv<- summary(lm(merge$survival~merge$year+merge$stage, weights=merge$abundance))
+  lm_surv<- lm(merge$survival~merge$year+merge$stage, weights=merge$abundance)
   
   return(lm_surv)
 }

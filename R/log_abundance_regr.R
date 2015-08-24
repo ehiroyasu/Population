@@ -15,11 +15,11 @@ log_abundance_regr<- function(abundance, years, active_stages){
   active_abundance<- abundance[,active_stages]
   tot_abundance <- apply(active_abundance, 1, sum)
   log_abundance<-log(tot_abundance)
-  lm_log_abundance <- summary(lm(log_abundance ~ poly(years, 2)))
+  lm_log_abundance <- lm(log_abundance ~ poly(years, 2))
   
-  if (lm_log_abundance$coefficients[3,4]=='NaN'){
-    warning('p-value=NaN')
-  }
+#   if (lm_log_abundance$coefficients[3,4]=='NaN'){
+#     warning('p-value=NaN')
+#   }
   
   return(lm_log_abundance)
 }
