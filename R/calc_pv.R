@@ -14,11 +14,12 @@
 #'
 
 
-calc_pv<-function(surv_mat, fert_mat, trans_mat, N0_data, nstage, years, stage2mod, beta, active_stages, verbose=FALSE){
+calc_pv<-function(surv_mat, fert_mat, clon_mat, trans_mat, N0_data, nstage, years, stage2mod, beta, active_stages, verbose=FALSE){
   #sampling random survival matrices and fertility matrices with n years in simulation
   i_rand <- sample(1:dim(surv_mat)[3], size=length(years), replace=T)
   surv_rand <- surv_mat[,,i_rand]
   fert_rand <- fert_mat[,,i_rand]
+  clon_rand <- clon_mat[,,i_rand]
 
 
   ##inserting a trend into survival
@@ -29,7 +30,7 @@ calc_pv<-function(surv_mat, fert_mat, trans_mat, N0_data, nstage, years, stage2m
   surv_na<-temp[[3]]
   
   ##calculating new abundance matrices
-  abundance<- calc_abundance(N0_data, surv_trend, fert_rand, trans_mat, years)
+  abundance<- calc_abundance(N0_data, surv_trend, clon_rand, fert_rand, trans_mat, years)
   if (verbose) {
     print(abundance)
     plot(abundance[,active_stages])

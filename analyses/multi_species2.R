@@ -5,7 +5,7 @@ mydata <- Load_Compadre_Data(CompadreFile)
 
 pop_list <- unique(cbind(mydata$metadata$SpeciesAuthor,mydata$metadata$Population))
 num_pops <- dim(pop_list)[1]
-#num_pops <- 5 # for debugging
+num_pops <- 5 # for debugging
 delta=0.001
 alpha=seq(from=0.01, to=0.2, by=delta)
 
@@ -30,12 +30,14 @@ for (k in (last_pop+1):num_pops) {
   temp<- extract_mat(MatrixData)
   surv_mat<-temp$"survival matrices"
   fert_mat<-temp$"fertility matrices"
+  clon_mat<-temp$"clonal matrices"
   trans_mat<-temp$"transition matrices"
   
   # Remove all-zero years, as that causes problems
   all_zero <- apply(trans_mat, 3, mean) == 0
   surv_mat <- surv_mat[,,!all_zero]
   fert_mat <- fert_mat[,,!all_zero]
+  clon_mat <- clon_mat[,,!all_zero]
   trans_mat <- trans_mat[,,!all_zero]
   
   # The following populations have really strange matrices: 68
@@ -50,7 +52,7 @@ for (k in (last_pop+1):num_pops) {
   eigenvalues<-eigen(mean_trans_mat)
 
   #Running simulations
-  return_pv<-replicate(10000, calc_pv(surv_mat, fert_mat, trans_mat, N0_data, nstage=nstage, years=1:10, stage2mod=active_stages, beta=0.01, active_stages = active_stages, verbose=FALSE))
+  return_pv<-replicate(100, calc_pv(surv_mat, fert_mat, trans_mat, N0_data, nstage=nstage, years=1:10, stage2mod=active_stages, beta=0.01, active_stages = active_stages, verbose=FALSE))
 
   # (surv_mat, fert_mat, trans_mat, N0_data, nstage, years, stage2mod, beta, active_stages, verbose=FALSE)
   #Analysis

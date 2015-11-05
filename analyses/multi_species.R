@@ -26,12 +26,14 @@ for (k in 1:num_pops) {
   temp<- extract_mat(MatrixData)
   surv_mat<-temp$"survival matrices"
   fert_mat<-temp$"fertility matrices"
+  clon_mat<-temp$"clonal matrices"
   trans_mat<-temp$"transition matrices"
   
   # Remove all-zero years, as that causes problems
   all_zero <- apply(trans_mat, 3, mean) == 0
   surv_mat <- surv_mat[,,!all_zero]
   fert_mat <- fert_mat[,,!all_zero]
+  clon_mat <- clon_mat[,,!all_zero]
   trans_mat <- trans_mat[,,!all_zero]
   
   # The following populations have really strange matrices: 68
