@@ -8,6 +8,12 @@ Compiled using `r R.Version()$version.string` on `r date()`.
 
 This is a place to record project history in more detail than can be done in the commit messages, as well as notes about what we have learned and what needs to be done. Please date entries and add new entries in reverse chronological order; within a day add new items at the bottom of the entry and tag with your initials.
 
+#5 Nov. 2015
+
+**EH**
+##Coding to do's addressed:
+The low hanging fruit here was to add in clonal reproduction. I've done this by adding it to the matrix extraction function to pull the clonal matrices from the data base and format them for use. I also adjusted the Load_Compadre_Data code to extract studies that were six years or longer (per the notes below). Next I will tackle modifying plotting routines and writing a function to return p-values of a specified coefficient.
+
 # 12 Aug. 2015
 
 **BK:**
