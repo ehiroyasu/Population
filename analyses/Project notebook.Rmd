@@ -11,8 +11,20 @@ This is a place to record project history in more detail than can be done in the
 #5 Nov. 2015
 
 **EH**
+
 ##Coding to do's addressed:
 The low hanging fruit here was to add in clonal reproduction. I've done this by adding it to the matrix extraction function to pull the clonal matrices from the data base and format them for use. I also adjusted the Load_Compadre_Data code to extract studies that were six years or longer (per the notes below). Next I will tackle modifying plotting routines and writing a function to return p-values of a specified coefficient.
+
+# 20 Aug. 2015
+**BK:**
+
+## P-value calculations
+I've developed code that calculates P-values for `lm` objects without the extra overhead of everything done by `summary()`. It speeds things up by a factor of 3-4 (see `Faster_P_value.html`). It's conceivable that using a less robust matrix inversion than `chol2inv` would be even faster, but with some risk.
+
+I have not examined whether it will work with `gls` objects (I doubt it will), so if we move to using `gls()` to deal with autocorrelation then we'll need a new version, I suspect. Actually, I can't find the source code for `summary.gls()`, so we may be stuck.
+
+I also standardized the call for extracting P-values, so that any lm object can be passed to it. This required changes in `calc_pv` and the various `XXX_regr` functions.
+
 
 # 12 Aug. 2015
 
@@ -92,10 +104,10 @@ Some of the strange results we are seeing may be do to truncation of the trend a
 
 Coding:
 
-- Test out alternatives to `summary.lm()`
-- Write a generic function for returning the P-value of a specified coefficient from any lm object
+- ~~Test out alternatives to `summary.lm()`~~
+- ~~Write a generic function for returning the P-value of a specified coefficient from any lm object~~
 - Revise trend insertion to minimize trend truncation
-- Include clonal reproduction in the transition matrices
+- ~~Include clonal reproduction in the transition matrices~~
 - Modify plotting routines to allow control over which outputs to plot
 
 Conceptual stuff:
@@ -107,7 +119,7 @@ Conceptual stuff:
 
 Data issues:
 
-- Indentify the populations we are manually excluding and provide new criteria
+- Identify the populations we are manually excluding and provide new criteria
 - Install the new version of the database
 - See how many populations meet the 6-year criterion
 - Write scripts for internal data quality evaluations
