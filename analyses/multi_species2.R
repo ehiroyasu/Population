@@ -25,8 +25,10 @@ for (k in (last_pop+1):num_pops) {
   save<-as.numeric(rownames(temp1))
   MatClass<-mydata$mat_class[save]
   
-  active_stages<-subset(MatClass[[1]]$MatrixClassNumber, MatClass[[1]]$MatrixClassOrganized=='active')
-
+  #active_stages<-subset(MatClass[[1]]$MatrixClassNumber, MatClass[[1]]$MatrixClassOrganized=='active')
+  #removing seedlings from the active stages
+  active_stages<-subset(MatClass[[1]]$MatrixClassNumber, MatClass[[1]]$MatrixClassOrganized=='active' & MatClass[[1]]$MatrixClassAuthor != "Seedling")
+  
   #extracting matrices:
   temp<- extract_mat(MatrixData)
   surv_mat<-temp$"survival matrices"
