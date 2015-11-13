@@ -8,6 +8,13 @@ Compiled using `r R.Version()$version.string` on `r date()`.
 
 This is a place to record project history in more detail than can be done in the commit messages, as well as notes about what we have learned and what needs to be done. Please date entries and add new entries in reverse chronological order; within a day add new items at the bottom of the entry and tag with your initials.
 
+#13 Nov. 2015
+**EH**
+##Seedling and Active Stages
+EH created a function to remove the seedling stage and filter through the active stages to ensure that there are at least two active stages. This means that the data gets filtered when it is loaded from the Compadre database, filtered again to determine the active stages, then filtered a third time to determine that there are at least two active stages. It looks like the data that does not meet the criteria in the last filter may not be getting removed completely. EH still needs to look into this and figure out why. EH reran the model with no trend in the data and the seedling stage removed, this can be found in Pop_dem_Output_data_11.13_NoTrend.Rdata and allplots_notrend_11.13.pdf.
+
+After completely filtering the data, I will rerun the model both with and without a trend beta. Following this, we can start to assess how many species meet our search criteria after we expand to multiple growth types.
+
 #5 Nov. 2015
 
 **EH**
