@@ -2,7 +2,7 @@
 #'This function filters matrix data to output matrices that have two or more active stages
 #'
 #'@param tempMatClass pre-filtered compadre data. To see other parameters the data is filtered by see the function Load_Compadre_Data.R
-#'@param tempMatrixData
+#'@param tempMatrixData prefiltered compadre matrices.
 #'
 #'@references COMPADRE Plant Matrix Database. Max Planck Institute for 
 #'Demographic Research (Germany). Available at www.compadre-db.org 
