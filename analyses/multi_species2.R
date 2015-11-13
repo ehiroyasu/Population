@@ -20,14 +20,17 @@ for (k in (last_pop+1):num_pops) {
   print(k)
   temp1<-subset(mydata$metadata, SpeciesAuthor==pop_list[k,1] & Population==pop_list[k,2])
   
-  MatrixData<- as.array(mydata$mat[mydata$metadata$SpeciesAuthor==pop_list[k,1] & mydata$metadata$Population==pop_list[k,2]])
+  tempMatrixData<- as.array(mydata$mat[mydata$metadata$SpeciesAuthor==pop_list[k,1] & mydata$metadata$Population==pop_list[k,2]])
   
   save<-as.numeric(rownames(temp1))
-  MatClass<-mydata$mat_class[save]
+  tempMatClass<-mydata$mat_class[save]
   
   #active_stages<-subset(MatClass[[1]]$MatrixClassNumber, MatClass[[1]]$MatrixClassOrganized=='active')
   #removing seedlings from the active stages
-  active_stages<-subset(MatClass[[1]]$MatrixClassNumber, MatClass[[1]]$MatrixClassOrganized=='active' & MatClass[[1]]$MatrixClassAuthor != "Seedling")
+  temp<-filter_active_stages(tempMatClass, tempMatrixData)
+  active_stages<-temp[[1]]
+  MatClass<-temp[[2]]
+  MatrixData<-temp[[3]]
   
   #extracting matrices:
   temp<- extract_mat(MatrixData)
@@ -55,7 +58,7 @@ for (k in (last_pop+1):num_pops) {
   eigenvalues<-eigen(mean_trans_mat)
 
   #Running simulations
-  return_pv<-replicate(100, calc_pv(surv_mat, fert_mat, trans_mat, N0_data, nstage=nstage, years=1:10, stage2mod=active_stages, beta=0.01, active_stages = active_stages, verbose=FALSE))
+  return_pv<-replicate(10000, calc_pv(surv_mat, fert_mat, trans_mat, N0_data, nstage=nstage, years=1:10, stage2mod=active_stages, beta=0.01, active_stages = active_stages, verbose=FALSE))
 
   # (surv_mat, fert_mat, trans_mat, N0_data, nstage, years, stage2mod, beta, active_stages, verbose=FALSE)
   #Analysis
@@ -67,7 +70,7 @@ for (k in (last_pop+1):num_pops) {
   
 }
 
-save(output, file="Pop_dem_Output_data.Rdata")
+save(output, file="Pop_dem_Output_data_11.13_NoTrend.Rdata")
 
 ##Examining eigenvectors
 eigenvectors<-list()
@@ -131,7 +134,7 @@ alpha0.1_plot<-alpha0.1_plot+geom_abline()+scale_size_identity(guide="none")+the
 #plot into single pdf:
 plots<-list(NULL)
 
-pdf(paste("allplots.pdf"), height=20)
+pdf(paste("allplots_notrend_11.13.pdf"), height=20)
 for (k in 1:num_pops){
   print(k)
   if ( !is.null(output[[k]]) ) {
