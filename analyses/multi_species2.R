@@ -16,8 +16,8 @@ load("Pop_dem_Output_data.Rdata")
 last_pop <- length(output)
 str(output[[64]])
 
-for (k in (last_pop+1):num_pops) {
-  print(k)
+for (k in 1:num_pops) {
+  #print(k)
   temp1<-subset(mydata$metadata, SpeciesAuthor==pop_list[k,1] & Population==pop_list[k,2])
   
   tempMatrixData<- as.array(mydata$mat[mydata$metadata$SpeciesAuthor==pop_list[k,1] & mydata$metadata$Population==pop_list[k,2]])
