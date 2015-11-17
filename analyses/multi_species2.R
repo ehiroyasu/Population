@@ -6,7 +6,7 @@ mydata <- Load_Compadre_Data(CompadreFile)
 
 pop_list <- unique(cbind(mydata$metadata$SpeciesAuthor,mydata$metadata$Population))
 num_pops <- dim(pop_list)[1]
-num_pops <- 5 # for debugging
+num_pops <- 25 # for debugging
 delta=0.001
 alpha=seq(from=0.01, to=0.2, by=delta)
 
@@ -16,8 +16,9 @@ load("Pop_dem_Output_data.Rdata")
 last_pop <- length(output)
 str(output[[64]])
 
+
 for (k in 1:num_pops) {
-  #print(k)
+  print(k)
   temp1<-subset(mydata$metadata, SpeciesAuthor==pop_list[k,1] & Population==pop_list[k,2])
   
   tempMatrixData<- as.array(mydata$mat[mydata$metadata$SpeciesAuthor==pop_list[k,1] & mydata$metadata$Population==pop_list[k,2]])
@@ -31,6 +32,7 @@ for (k in 1:num_pops) {
   active_stages<-temp[[1]]
   MatClass<-temp[[2]]
   MatrixData<-temp[[3]]
+  excluded<- temp[[4]]
   
   #extracting matrices:
   temp<- extract_mat(MatrixData)
@@ -70,7 +72,7 @@ for (k in 1:num_pops) {
   
 }
 
-save(output, file="Pop_dem_Output_data_11.13_NoTrend.Rdata")
+save(output, file="Pop_dem_Output_data_11.16_NoTrend.Rdata")
 
 ##Examining eigenvectors
 eigenvectors<-list()
