@@ -20,11 +20,12 @@ filter_active_stages<-function(tempMatClass, tempMatrixData){
   }
   
   save<-which(!active_stages_lessthan2)
+  excluded<-which(active_stages_lessthan2)
   active_stages<-active_stages[save]
   MatClass<-tempMatClass[save]
   MatrixData<-tempMatrixData[save]
   
-  return(list(active_stages, MatClass, MatrixData))
+  return(list(active_stages, MatClass, MatrixData, excluded))
 }
 
 
