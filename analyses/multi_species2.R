@@ -1,27 +1,27 @@
 library(DemographicTrend)
 
-CompadreFile <- "COMPADRE_10_11_2014_version_3.0.Rdata"
+#CompadreFile <- "COMPADRE_10_11_2014_version_3.0.Rdata"
 CompadreFile <- "COMPADRE_v.3.2.1.Rdata"
 mydata <- Load_Compadre_Data(CompadreFile)
 
-pop_list <- unique(cbind(mydata$metadata$SpeciesAuthor,mydata$metadata$Population))
+pop_list <- unique(cbind(mydata$metadata$SpeciesAuthor,mydata$metadata$MatrixPopulation))
 num_pops <- dim(pop_list)[1]
-num_pops <- 25 # for debugging
+#num_pops <- 25 # for debugging
 delta=0.001
 alpha=seq(from=0.01, to=0.2, by=delta)
 
 #output <- list(NULL)
 
-load("Pop_dem_Output_data.Rdata")
-last_pop <- length(output)
-str(output[[64]])
+#load("Pop_dem_Output_data.Rdata")
+#last_pop <- length(output)
+#str(output[[64]])
 
 
 for (k in 1:num_pops) {
   print(k)
-  temp1<-subset(mydata$metadata, SpeciesAuthor==pop_list[k,1] & Population==pop_list[k,2])
+  temp1<-subset(mydata$metadata, SpeciesAuthor==pop_list[k,1] & MatrixPopulation==pop_list[k,2])
   
-  tempMatrixData<- as.array(mydata$mat[mydata$metadata$SpeciesAuthor==pop_list[k,1] & mydata$metadata$Population==pop_list[k,2]])
+  tempMatrixData<- as.array(mydata$mat[mydata$metadata$SpeciesAuthor==pop_list[k,1] & mydata$metadata$MatrixPopulation==pop_list[k,2]])
   
   save<-as.numeric(rownames(temp1))
   tempMatClass<-mydata$mat_class[save]
@@ -60,7 +60,7 @@ for (k in 1:num_pops) {
   eigenvalues<-eigen(mean_trans_mat)
 
   #Running simulations
-  return_pv<-replicate(10000, calc_pv(surv_mat, fert_mat, trans_mat, N0_data, nstage=nstage, years=1:10, stage2mod=active_stages, beta=0.01, active_stages = active_stages, verbose=FALSE))
+  return_pv<-replicate(10000, calc_pv(surv_mat, fert_mat, trans_mat, N0_data, nstage=nstage, years=1:10, stage2mod=active_stages, beta=0.0, active_stages = active_stages, verbose=FALSE))
 
   # (surv_mat, fert_mat, trans_mat, N0_data, nstage, years, stage2mod, beta, active_stages, verbose=FALSE)
   #Analysis
@@ -72,7 +72,7 @@ for (k in 1:num_pops) {
   
 }
 
-save(output, file="Pop_dem_Output_data_11.16_NoTrend.Rdata")
+save(output, file="Pop_dem_Output_data_11.17_NoTrend_Compadrev2.Rdata")
 
 ##Examining eigenvectors
 eigenvectors<-list()
@@ -136,7 +136,7 @@ alpha0.1_plot<-alpha0.1_plot+geom_abline()+scale_size_identity(guide="none")+the
 #plot into single pdf:
 plots<-list(NULL)
 
-pdf(paste("allplots_notrend_11.13.pdf"), height=20)
+pdf(paste("allplots_notrend_11.17.pdf"), height=20)
 for (k in 1:num_pops){
   print(k)
   if ( !is.null(output[[k]]) ) {
