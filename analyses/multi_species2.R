@@ -5,6 +5,7 @@ CompadreFile <- "COMPADRE_v.3.2.1.Rdata"
 mydata <- Load_Compadre_Data(CompadreFile)
 
 pop_list <- unique(cbind(mydata$metadata$SpeciesAuthor,mydata$metadata$MatrixPopulation))
+pop_list<-pop_list[-93,]
 num_pops <- dim(pop_list)[1]
 #num_pops <- 25 # for debugging
 delta=0.001
@@ -20,20 +21,23 @@ alpha=seq(from=0.01, to=0.2, by=delta)
 for (k in 1:num_pops) {
   print(k)
   temp1<-subset(mydata$metadata, SpeciesAuthor==pop_list[k,1] & MatrixPopulation==pop_list[k,2])
-  
+
   tempMatrixData<- as.array(mydata$mat[mydata$metadata$SpeciesAuthor==pop_list[k,1] & mydata$metadata$MatrixPopulation==pop_list[k,2]])
-  
+
   save<-as.numeric(rownames(temp1))
   tempMatClass<-mydata$mat_class[save]
+ 
+  MatClass<-tempMatClass[save]
+  MatrixData<-tempMatrixData[save]
   
-  #active_stages<-subset(MatClass[[1]]$MatrixClassNumber, MatClass[[1]]$MatrixClassOrganized=='active')
+  active_stages<-subset(MatClass[[1]]$MatrixClassNumber, MatClass[[1]]$MatrixClassOrganized=='active')
   #removing seedlings from the active stages
-  temp<-filter_active_stages(tempMatClass, tempMatrixData)
-  active_stages<-temp[[1]]
-  MatClass<-temp[[2]]
-  MatrixData<-temp[[3]]
-  excluded<- temp[[4]]
-  
+#   temp<-filter_active_stages(tempMatClass, tempMatrixData)
+#   active_stages<-temp[[1]]
+#   MatClass<-temp[[2]]
+#   MatrixData<-temp[[3]]
+#   excluded<- temp[[4]]
+#   
   #extracting matrices:
   temp<- extract_mat(MatrixData)
   surv_mat<-temp$"survival matrices"
