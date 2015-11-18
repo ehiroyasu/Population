@@ -25,7 +25,7 @@ Load_Compadre_Data <- function(CompadreFile){
 
   ##then refine by specified components
   tempMetadata <- subset(metadata, MatrixComposite == "Individual" & MatrixTreatment == "Unmanipulated"
-                         & StudyDuration >= 6 & MatrixDimension >= 3 & MatrixCaptivity =="W" & MatrixSplit == "Divided")
+                         & StudyDuration >= 6 & MatrixDimension >= 3 & MatrixCaptivity =="W" & MatrixSplit == "Divided")#& AnnualPeriodicity == 1)
   keep <- as.numeric(rownames(tempMetadata))
   
   
