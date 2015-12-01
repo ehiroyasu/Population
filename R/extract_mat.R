@@ -31,5 +31,5 @@ extract_mat<- function(MatrixData){
   for (i in 1:dim(MatrixData)){
     trans_mat[,,i]<-MatrixData[[i]]$matA
   }
-  return(list("survival matrices"=surv_mat, "fertility matrices"=fert_mat, "clonal matrices" = clon_mat, "transition matrices"=trans_mat))
+  return(list("surv_mat"= surv_mat, "fert_mat"= fert_mat, "clon_mat"= clon_mat, "trans_mat"= trans_mat))
 }
