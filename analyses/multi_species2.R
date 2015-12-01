@@ -5,7 +5,6 @@ CompadreFile <- "COMPADRE_v.3.2.1.Rdata"
 mydata <- Load_Compadre_Data(CompadreFile)
 
 pop_list <- unique(cbind(mydata$metadata$SpeciesAuthor,mydata$metadata$MatrixPopulation))
-pop_list<-pop_list[-93,]
 num_pops <- dim(pop_list)[1]
 #num_pops <- 25 # for debugging
 delta=0.001
@@ -22,13 +21,15 @@ for (k in 1:num_pops) {
   print(k)
   temp1<-subset(mydata$metadata, SpeciesAuthor==pop_list[k,1] & MatrixPopulation==pop_list[k,2])
 
-  tempMatrixData<- as.array(mydata$mat[mydata$metadata$SpeciesAuthor==pop_list[k,1] & mydata$metadata$MatrixPopulation==pop_list[k,2]])
+  MatrixData<- as.array(mydata$mat[mydata$metadata$SpeciesAuthor==pop_list[k,1] & mydata$metadata$MatrixPopulation==pop_list[k,2]])
 
   save<-as.numeric(rownames(temp1))
-  tempMatClass<-mydata$mat_class[save]
+  MatClass<-mydata$mat_class[save]
  
-  MatClass<-tempMatClass[save]
-  MatrixData<-tempMatrixData[save]
+#temp MatClass and Matrix data to be used when using the filter_active_stages function.   
+  #tempMatClass<-mydata$mat_class[save]
+  #MatClass<-tempMatClass[save]
+  #MatrixData<-tempMatrixData[save]
   
   active_stages<-subset(MatClass[[1]]$MatrixClassNumber, MatClass[[1]]$MatrixClassOrganized=='active')
   #removing seedlings from the active stages
@@ -39,11 +40,11 @@ for (k in 1:num_pops) {
 #   excluded<- temp[[4]]
 #   
   #extracting matrices:
-  temp<- extract_mat(MatrixData)
-  surv_mat<-temp$"survival matrices"
-  fert_mat<-temp$"fertility matrices"
-  clon_mat<-temp$"clonal matrices"
-  trans_mat<-temp$"transition matrices"
+  temp2<- extract_mat(MatrixData)
+  temp_surv_mat[[k]]<-temp2[[1]]
+  temp_fert_mat<-temp2[[2]]
+  temp_clon_mat<-temp2[[3]]
+  temp_trans_mat<-temp2[[4]]
   
   # Remove all-zero years, as that causes problems
   all_zero <- apply(trans_mat, 3, mean) == 0
@@ -51,11 +52,11 @@ for (k in 1:num_pops) {
   fert_mat <- fert_mat[,,!all_zero]
   clon_mat <- clon_mat[,,!all_zero]
   trans_mat <- trans_mat[,,!all_zero]
+
   
-  # The following populations have really strange matrices: 68
-  # The following matrices have some years of zero survival and others of zero fertility: 212
   if(length(dim(trans_mat)) > 2){
-  if (mean(fert_mat) > 0 & k != 68 & k != 212 & dim(trans_mat)[3] >= 5 & max(temp1$SurvivalIssue) <= 1) {
+  if (mean(fert_mat) > 0 & dim(trans_mat)[3] >= 5 & max(temp1$SurvivalIssue) <= 1) {
+  
   #calculating the number of stages in the matrix:
   nstage<-1:dim(surv_mat)[1]
   
@@ -70,10 +71,11 @@ for (k in 1:num_pops) {
   #Analysis
   output[[k]]<-analyze_pv(alpha, return_pv)
   output[[k]]<-c(output[[k]], names=list(pop_list[k,]), eigenvalues=eigenvalues)
-
-  }
-  }
   
+  }
+  }
+  }
+
 }
 
 save(output, file="Pop_dem_Output_data_11.17_NoTrend_Compadrev2.Rdata")
