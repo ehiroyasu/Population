@@ -31,5 +31,5 @@ Load_Compadre_Data <- function(CompadreFile){
   
   #tempMetadata$tempMat <- compadre$mat[keep]
   
-  return(list(metadata=tempMetadata, mat=compadre$mat[keep], mat_class=compadre$matrixClass))
+  return(list(metadata=tempMetadata, mat=compadre$mat[keep], mat_class=compadre$matrixClass[keep]))
 }
