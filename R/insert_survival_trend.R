@@ -27,6 +27,8 @@ insert_survival_trend<- function(surv_rand, beta, nstage, stage2mod, years, verb
     for (i in years){
       for (j in stage2mod){
         survival <- sum(surv_trend[,j,i])
+        #surv_min<- min(surv_trend[,,i])
+        #surv_trend[,j,i] <- surv_trend[,j,i] * (survival-(beta+surv_min)*i)/survival
         surv_trend[,j,i] <- surv_trend[,j,i] * (survival-beta*i)/survival
       }
     }
