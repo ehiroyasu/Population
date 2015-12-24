@@ -8,6 +8,15 @@ Compiled using `r R.Version()$version.string` on `r date()`.
 
 This is a place to record project history in more detail than can be done in the commit messages, as well as notes about what we have learned and what needs to be done. Please date entries and add new entries in reverse chronological order; within a day add new items at the bottom of the entry and tag with your initials.
 
+#23 Dec 2015
+**EH**
+#Truncation issues with survival trend
+BK and EH previously discussed issues of truncation when introducing a trend into the survival matrices.EH thinks it will solve the truncation issue to calculate the minimum survival value then add this to the trend beta, to ensure that we do not get zero values in elements of the matrix (leading to NA's or NaN's or Inf's). 
+```{r, echo=FALSE}
+surv_min<- min(surv_trend[,,i])
+surv_trend[,j,i] <- surv_trend[,j,i] * (survival-(beta+surv_min)*i)/survival
+```
+
 #17 Nov. 2015
 **EH**
 ##Expanding growth types
