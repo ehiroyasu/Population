@@ -5,53 +5,54 @@ CompadreFile <- "COMPADRE_v.3.2.1.Rdata"
 mydata <- Load_Compadre_Data(CompadreFile)
 
 pop_list <- unique(cbind(mydata$metadata$SpeciesAuthor,mydata$metadata$MatrixPopulation))
-num_pops <- dim(pop_list)[1]
-#num_pops <- 25 # for debugging
+#num_pops <- dim(pop_list)[1]
+num_pops <- 5 # for debugging
 delta=0.001
 alpha=seq(from=0.01, to=0.2, by=delta)
 
-#output <- list(NULL)
+output <- list(NULL)
 
 #load("Pop_dem_Output_data.Rdata")
 #last_pop <- length(output)
 #str(output[[64]])
 
 
+
 for (k in 1:num_pops) {
   print(k)
   temp1<-subset(mydata$metadata, SpeciesAuthor==pop_list[k,1] & MatrixPopulation==pop_list[k,2])
 
-  MatrixData<- as.array(mydata$mat[mydata$metadata$SpeciesAuthor==pop_list[k,1] & mydata$metadata$MatrixPopulation==pop_list[k,2]])
+  tempMatrixData<- as.array(mydata$mat[mydata$metadata$SpeciesAuthor==pop_list[k,1] & mydata$metadata$MatrixPopulation==pop_list[k,2]])
 
   save<-as.numeric(rownames(temp1))
-  MatClass<-mydata$mat_class[save]
- 
-#temp MatClass and Matrix data to be used when using the filter_active_stages function.   
-  #tempMatClass<-mydata$mat_class[save]
-  #MatClass<-tempMatClass[save]
-  #MatrixData<-tempMatrixData[save]
+  #MatClass<-mydata$mat_class[save]
   
-  active_stages<-subset(MatClass[[1]]$MatrixClassNumber, MatClass[[1]]$MatrixClassOrganized=='active')
+#temp MatClass and Matrix data to be used when using the filter_active_stages function.   
+  tempMatClass<-mydata$mat_class[save]
+  MatClass<-tempMatClass[save]
+  MatrixData<-tempMatrixData[save]
+  
+  #active_stages<-subset(MatClass[[1]]$MatrixClassNumber, MatClass[[1]]$MatrixClassOrganized=='active')
   #removing seedlings from the active stages
-#   temp<-filter_active_stages(tempMatClass, tempMatrixData)
-#   active_stages<-temp[[1]]
-#   MatClass<-temp[[2]]
-#   MatrixData<-temp[[3]]
-#   excluded<- temp[[4]]
-#   
+   temp<-filter_active_stages(tempMatClass, tempMatrixData)
+   active_stages<-temp[[1]][1]
+   MatClass<-temp[[2]][[1]]
+   MatrixData<-temp[[3]]
+   excluded<- temp[[4]]
+   
   #extracting matrices:
   temp2<- extract_mat(MatrixData)
-  temp_surv_mat[[k]]<-temp2[[1]]
-  temp_fert_mat<-temp2[[2]]
-  temp_clon_mat<-temp2[[3]]
-  temp_trans_mat<-temp2[[4]]
+  surv_mat<-temp2[[1]]
+  fert_mat<-temp2[[2]]
+  clon_mat<-temp2[[3]]
+  trans_mat<-temp2[[4]]
   
   # Remove all-zero years, as that causes problems
-  all_zero <- apply(trans_mat, 3, mean) == 0
-  surv_mat <- surv_mat[,,!all_zero]
-  fert_mat <- fert_mat[,,!all_zero]
-  clon_mat <- clon_mat[,,!all_zero]
-  trans_mat <- trans_mat[,,!all_zero]
+  #all_zero <- apply(trans_mat, 3, mean) == 0
+  #surv_mat <- surv_mat[,,!all_zero]
+  #fert_mat <- fert_mat[,,!all_zero]
+  #clon_mat <- clon_mat[,,!all_zero]
+  #trans_mat <- trans_mat[,,!all_zero]
 
   
   if(length(dim(trans_mat)) > 2){
@@ -65,7 +66,7 @@ for (k in 1:num_pops) {
   eigenvalues<-eigen(mean_trans_mat)
 
   #Running simulations
-  return_pv<-replicate(10000, calc_pv(surv_mat, fert_mat, trans_mat, N0_data, nstage=nstage, years=1:10, stage2mod=active_stages, beta=0.0, active_stages = active_stages, verbose=FALSE))
+  return_pv<-replicate(10, calc_pv(surv_mat, fert_mat, trans_mat, nstage=nstage, years=1:10, stage2mod=active_stages, beta=0.0, active_stages = active_stages, verbose=FALSE))
 
   # (surv_mat, fert_mat, trans_mat, N0_data, nstage, years, stage2mod, beta, active_stages, verbose=FALSE)
   #Analysis
@@ -74,8 +75,7 @@ for (k in 1:num_pops) {
   
   }
   }
-  }
-
+ 
 }
 
 save(output, file="Pop_dem_Output_data_11.17_NoTrend_Compadrev2.Rdata")
