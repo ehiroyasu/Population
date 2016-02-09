@@ -47,7 +47,7 @@ for (k in 1:num_pops) {
   clon_mat<-temp2[[3]]
   trans_mat<-temp2[[4]]
   
-  # Remove all-zero years, as that causes problems
+# Remove all-zero years, as that causes problems
   #all_zero <- apply(trans_mat, 3, mean) == 0
   #surv_mat <- surv_mat[,,!all_zero]
   #fert_mat <- fert_mat[,,!all_zero]
