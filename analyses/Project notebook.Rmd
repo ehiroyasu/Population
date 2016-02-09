@@ -8,6 +8,18 @@ Compiled using `r R.Version()$version.string` on `r date()`.
 
 This is a place to record project history in more detail than can be done in the commit messages, as well as notes about what we have learned and what needs to be done. Please date entries and add new entries in reverse chronological order; within a day add new items at the bottom of the entry and tag with your initials.
 
+#8 Feb 2016
+**EH**
+#Truncation issues with survival trend (pt2)
+BK and EH discussed the "solution" below, which does not work. The new solution is contained in the function insert_trend_trunc.R. After adding the trend beta into the array of survival matrices, the function calculates the minimum survival for each matrix. For any matrix with a negative minimum survival, that value is then subtracted from the nonzero elements of the survival matrix. To select nonzero elements of the matrix, the minimum survival value is multiplied by the expression surv_trend[,j,i]!=0, taking advantage of the factor structure of TRUE/FALSE. Any elements not equal to zero will then be equal to the minimum survival. This matrix is then added to the surv _trend matrix to get rid of negative values.
+```{r, echo=FALSE}
+ if (surv_min[i]<0){
+       surv_nonzero<- (surv_trend[,j,i]!=0)*surv_min[i]
+       surv_trend[,j,i]<-surv_trend[,j,i]-surv_nonzero
+ }
+```
+
+
 #23 Dec 2015
 **EH**
 #Truncation issues with survival trend
