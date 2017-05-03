@@ -4,7 +4,6 @@
 #'
 #'@param surv_mat array of survival matrices from COMPADRE database
 #'@param fert_mat array of fertility matrices from COMPADRE database
-#'@param N0_data matrix of N0 vectors
 #'@param nstage number of stages in matrix data
 #'@param years number of years in simulation
 #'@param stage2mod stage that is modified by inserted survival trend

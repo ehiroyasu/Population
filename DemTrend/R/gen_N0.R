@@ -23,7 +23,7 @@
 #'
 #'@author Elizabeth Hiroyasu and Bruce Kendall
 
-gen_N0<- function(trans_mat, n_return=1, n_converge=100){
+gen_N0<- function(trans_mat=trans_mat, n_return=1, n_converge=100){
   n_mat <- dim(trans_mat)[3] # Number of matrices
   
   # Start from the stable stage distribution of the mean matrix 

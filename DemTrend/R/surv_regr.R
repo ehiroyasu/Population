@@ -22,7 +22,6 @@ surv_regr<- function(surv_trend, active_stages, abundance){
   
   library(reshape2)
   survival<-melt(survival, varnames=c("stage", "year"))
-#  abundance<-melt(abundance[-1,], varnames=c("year", "stage"))
   abundance<-melt(abundance[-1,active_stages], varnames=c("year", "stage"))
   merge<-merge(survival, abundance, by=c("stage", "year"))
   colnames(merge)<-c("stage", "year", "survival", "abundance")

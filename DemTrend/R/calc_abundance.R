@@ -18,7 +18,7 @@
 calc_abundance<- function(surv_trend, fert_rand, clon_rand, trans_mat, years){
   trans_mat_trend<- surv_trend + fert_rand + clon_rand
   abundance <- matrix(nrow=length(years)+1, ncol=(dim(surv_trend)[1]))
-  abundance[1,] <- gen_N0(trans_mat)
+  abundance[1,] <- gen_N0(trans_mat=trans_mat, n_return=1, n_converge=100)
   for (i in years){
    
     abundance[i+1,]<-trans_mat_trend[,,i]%*%abundance[i,]
