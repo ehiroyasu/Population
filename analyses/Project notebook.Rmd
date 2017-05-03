@@ -8,6 +8,12 @@ Compiled using `r R.Version()$version.string` on `r date()`.
 
 This is a place to record project history in more detail than can be done in the commit messages, as well as notes about what we have learned and what needs to be done. Please date entries and add new entries in reverse chronological order; within a day add new items at the bottom of the entry and tag with your initials.
 
+#3 May 2017
+**EH**
+#issues with gen_N0 function
+when running the code, the gen_N0 function is stopping the simulations because it says "argument 'trans_mat' is missing, with no default." Its unclear to me why this error is occurring. Even when trans_mat is read into the environment manually, this particular function still causes the code to error.
+
+
 #8 Feb 2016
 **EH**
 #Truncation issues with survival trend (pt2)
